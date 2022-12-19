@@ -67,8 +67,7 @@ public class UserRepository {
      */
     public List<User> findAllOrderById() {
         Session session = sf.openSession();
-        Query query = session.createQuery("from User as i order by i.id", User.class);
-        return query.getResultList();
+        return session.createQuery("from User as i order by i.id", User.class).getResultList();
     }
 
     /**
@@ -77,10 +76,9 @@ public class UserRepository {
      */
     public Optional<User> findById(int id) {
         Session session = sf.openSession();
-            User user = session.createQuery("from User where id = :userId", User.class)
+           return session.createQuery("from User where id = :userId", User.class)
                     .setParameter("userId", id)
-                    .uniqueResult();
-        return Optional.ofNullable(user);
+                    .uniqueResultOptional();
     }
 
     /**
@@ -90,9 +88,8 @@ public class UserRepository {
      */
     public List<User> findByLikeLogin(String key) {
         Session session = sf.openSession();
-        Query query = session.createQuery("from User as i where i.login like :loginKey", User.class)
-                .setParameter("loginKey", "%" + key + "%");
-        return query.getResultList();
+        return session.createQuery("from User as i where i.login like :loginKey", User.class)
+                .setParameter("loginKey", "%" + key + "%").getResultList();
     }
 
     /**
@@ -102,9 +99,8 @@ public class UserRepository {
      */
     public Optional<User> findByLogin(String login) {
         Session session = sf.openSession();
-        User user = session.createQuery("from User where login = :userLogin", User.class)
+        return session.createQuery("from User where login = :userLogin", User.class)
                 .setParameter("userLogin", login)
-                .uniqueResult();
-        return Optional.ofNullable(user);
+                .uniqueResultOptional();
     }
 }
