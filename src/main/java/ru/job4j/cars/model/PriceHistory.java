@@ -5,17 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@Data
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "auto_user", schema = "public")
-public class User {
+@Table(name = "price_history")
+public class PriceHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String login;
-    private String password;
+    private long before;
+    private long after;
+    private LocalDateTime created;
+
 }
