@@ -13,5 +13,9 @@
         <property name="format_sql">true</property>
 
         <mapping class="ru.job4j.cars.model.User"/>
+        <mapping class="ru.job4j.cars.model.Post"/>
+        <mapping class="ru.job4j.cars.model.Car"/>
+        <mapping class="ru.job4j.cars.model.Engine"/>
+        <mapping class="ru.job4j.cars.model.Driver"/>
     </session-factory>
 </hibernate-configuration>

@@ -1,12 +1,14 @@
 package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.User;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 @AllArgsConstructor
 public class UserRepository {
     private final CrudRepository crudRepository;
@@ -14,11 +16,15 @@ public class UserRepository {
     /**
      * Сохранить в базе.
      * @param user пользователь.
-     * @return пользователь с id.
+     * @return Optional с пользователем с id.
      */
-    public User create(User user) {
-        crudRepository.run(session -> session.persist(user));
-        return user;
+    public Optional<User> create(User user) {
+        try {
+            crudRepository.run(session -> session.persist(user));
+            return Optional.of(user);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     /**

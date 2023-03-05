@@ -1,0 +1,2 @@
+ALTER TABLE auto_post
+    ADD COLUMN IF NOT EXISTS car_id INT UNIQUE REFERENCES car (id);

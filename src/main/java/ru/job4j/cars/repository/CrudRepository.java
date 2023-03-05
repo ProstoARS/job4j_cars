@@ -2,6 +2,8 @@ package ru.job4j.cars.repository;
 import lombok.AllArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,6 +62,16 @@ public class CrudRepository {
             }
             return sq.list();
         };
+        return tx(command);
+    }
+
+    public boolean query(String query, Map<String, Object> args) {
+        Function<Session, Boolean> command =
+                session -> {
+                    Query qr = session.createQuery(query);
+                    args.keySet().forEach(key -> qr.setParameter(key, args.get(key)));
+                    return qr.executeUpdate() > 0;
+                };
         return tx(command);
     }
 
