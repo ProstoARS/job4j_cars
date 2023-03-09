@@ -1,6 +1,7 @@
 package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Engine;
 
@@ -8,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
+@Slf4j
 public class EngineRepository {
 
     private final CrudRepository crudRepository;
@@ -20,11 +22,13 @@ public class EngineRepository {
      */
 
     public Optional<Engine> createEngine(Engine engine) {
+        Optional<Engine> engineOptional = Optional.empty();
         try {
             crudRepository.run(session -> session.persist(engine));
-            return Optional.of(engine);
+            engineOptional = Optional.of(engine);
         } catch (Exception e) {
-            return Optional.empty();
+            log.error(e.getMessage());
         }
+        return engineOptional;
     }
 }

@@ -1,6 +1,7 @@
 package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.User;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
+@Slf4j
 public class UserRepository {
     private final CrudRepository crudRepository;
 
@@ -19,12 +21,14 @@ public class UserRepository {
      * @return Optional с пользователем с id.
      */
     public Optional<User> create(User user) {
+        Optional<User> userOptional = Optional.empty();
         try {
             crudRepository.run(session -> session.persist(user));
-            return Optional.of(user);
+           userOptional = Optional.of(user);
         } catch (Exception e) {
-            return Optional.empty();
+            log.error(e.getMessage());
         }
+        return userOptional;
     }
 
     /**

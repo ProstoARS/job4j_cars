@@ -1,6 +1,7 @@
 package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Post;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
+@Slf4j
 public class PostRepository {
 
     private static final String LAST_DAY = """
@@ -33,18 +35,21 @@ public class PostRepository {
 
     /**
      * Сохранить в базе.
+     *
      * @param post объявление.
      * @return Optional с объявлением с id.
-     * @exception Optional пустой.
+     * @throws Optional пустой.
      */
 
     public Optional<Post> createPost(Post post) {
+        Optional<Post> postOptional = Optional.empty();
         try {
             crudRepository.run(session -> session.persist(post));
-            return Optional.of(post);
+            postOptional = Optional.of(post);
         } catch (Exception e) {
-            return Optional.empty();
+            log.error(e.getMessage());
         }
+        return postOptional;
     }
 
     public List<Post> findPostLastDay() {

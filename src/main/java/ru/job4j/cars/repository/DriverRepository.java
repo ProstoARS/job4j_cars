@@ -1,6 +1,7 @@
 package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Driver;
 
@@ -8,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
+@Slf4j
 public class DriverRepository {
 
     private final CrudRepository crudRepository;
@@ -20,11 +22,13 @@ public class DriverRepository {
      */
 
     public Optional<Driver> createDriver(Driver driver) {
+        Optional<Driver> driverOptional = Optional.empty();
         try {
             crudRepository.run(session -> session.persist(driver));
-            return Optional.of(driver);
+            driverOptional = Optional.of(driver);
         } catch (Exception e) {
-            return Optional.empty();
+            log.error(e.getMessage());
         }
+        return driverOptional;
     }
 }
