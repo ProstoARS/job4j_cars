@@ -47,7 +47,7 @@ public class PostRepository {
             crudRepository.run(session -> session.persist(post));
             postOptional = Optional.of(post);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         return postOptional;
     }

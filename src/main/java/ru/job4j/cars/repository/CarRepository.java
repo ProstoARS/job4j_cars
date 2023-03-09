@@ -27,7 +27,7 @@ public class CarRepository {
             crudRepository.run(session -> session.persist(car));
             carOptional = Optional.of(car);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         return carOptional;
     }

@@ -27,7 +27,7 @@ public class DriverRepository {
             crudRepository.run(session -> session.persist(driver));
             driverOptional = Optional.of(driver);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         return driverOptional;
     }

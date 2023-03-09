@@ -27,7 +27,7 @@ public class EngineRepository {
             crudRepository.run(session -> session.persist(engine));
             engineOptional = Optional.of(engine);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         return engineOptional;
     }

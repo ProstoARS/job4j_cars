@@ -26,7 +26,7 @@ public class UserRepository {
             crudRepository.run(session -> session.persist(user));
            userOptional = Optional.of(user);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         return userOptional;
     }
