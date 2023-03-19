@@ -1,9 +1,6 @@
 package ru.job4j.cars.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,15 +10,18 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder
 public class Car {
 
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "engine_id")
     private Engine engine;
 

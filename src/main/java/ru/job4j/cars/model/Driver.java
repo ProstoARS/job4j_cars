@@ -1,6 +1,7 @@
 package ru.job4j.cars.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class Driver {
 
     @Id

@@ -90,4 +90,8 @@ public class CrudRepository {
             throw e;
         }
     }
+
+    public SessionFactory getSf() {
+        return this.sf;
+    }
 }

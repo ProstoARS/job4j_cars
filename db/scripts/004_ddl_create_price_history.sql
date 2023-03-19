@@ -4,7 +4,7 @@ CREATE TABLE price_history
     before  BIGINT not null,
     after   BIGINT not null,
     created TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
-    post_id INT NOT NULL REFERENCES auto_post (id)
+    post_id INT REFERENCES auto_post (id)
 );
 
 comment on table price_history is 'История изменения цены автомобиля';

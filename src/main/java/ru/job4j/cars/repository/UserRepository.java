@@ -18,7 +18,7 @@ public class UserRepository {
     /**
      * Сохранить в базе.
      * @param user пользователь.
-     * @return Optional с пользователем с id.
+     * @return Optional с пользователем с id или пустой.
      */
     public Optional<User> create(User user) {
         Optional<User> userOptional = Optional.empty();
@@ -54,19 +54,25 @@ public class UserRepository {
      * Список пользователь отсортированных по id.
      * @return список пользователей.
      */
-    public List<User> findAllOrderById() {
+    public List<User> findAllUsersOrderById() {
         return crudRepository.query("from User order by id asc", User.class);
     }
 
     /**
      * Найти пользователя по ID
-     * @return пользователь.
+     * @return Optional c пользователем или пустой.
      */
     public Optional<User> findById(int id) {
-        return crudRepository.optional(
-                "from User where id = :fId", User.class,
-                Map.of("fId", id)
-        );
+        Optional<User> optionalUser = Optional.empty();
+        try {
+            optionalUser = crudRepository.optional(
+                    "from User where id = :fId", User.class,
+                    Map.of("fId", id)
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+         return optionalUser;
     }
 
     /**
@@ -84,12 +90,22 @@ public class UserRepository {
     /**
      * Найти пользователя по login.
      * @param login login.
-     * @return Optional or user.
+     * @return Optional с пользователем или пустой.
      */
     public Optional<User> findByLogin(String login) {
-        return crudRepository.optional(
-                "from User where login = :fLogin", User.class,
-                Map.of("fLogin", login)
-        );
+        Optional<User> optionalUser = Optional.empty();
+        try {
+           optionalUser = crudRepository.optional(
+                    "from User where login = :fLogin", User.class,
+                    Map.of("fLogin", login)
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return optionalUser;
+    }
+
+    public CrudRepository getCrudRepository() {
+        return this.crudRepository;
     }
 }

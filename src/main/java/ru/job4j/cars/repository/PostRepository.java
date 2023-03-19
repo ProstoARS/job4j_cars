@@ -15,9 +15,13 @@ import java.util.Optional;
 @Slf4j
 public class PostRepository {
 
-    private static final String LAST_DAY = """
+    private static final String FIND_BY_ID = """
             FROM Post
-            WHERE created > :tCreated
+            WHERE id = :tId
+            """;
+
+    private static final String LAST_DAY = """
+            FROM Post WHERE created BETWEEN :fFrom AND :fTo
             """;
 
     private static final String WITH_PHOTO = """
@@ -26,9 +30,9 @@ public class PostRepository {
             """;
 
     private static final String SPECIFIC_BRAND = """
-            FROM Post AS p
-            JOIN fetch p.car
-            WHERE car.name LIKE :tBrand
+            FROM Post p
+            JOIN fetch p.car c
+            WHERE c.name = :tBrand
             """;
 
     private final CrudRepository crudRepository;
@@ -52,15 +56,52 @@ public class PostRepository {
         return postOptional;
     }
 
-    public List<Post> findPostLastDay() {
-        return crudRepository.query(LAST_DAY, Post.class, Map.of("tCreated", LocalDateTime.now().minusDays(1)));
+    /**
+     * Найти в базе по идентификатору.
+     *
+     * @param id идентификатор объявления.
+     * @return Optional с объявлением с id.
+     * @throws Optional пустой.
+     */
+    public Optional<Post> findPostById(int id) {
+        Optional<Post> postOptional = Optional.empty();
+        try {
+            postOptional = crudRepository.optional(FIND_BY_ID, Post.class, Map.of("tId", id));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return postOptional;
     }
+
+    /**
+     * Найти в базе объявления за последний день.
+     *
+     * @return Список найденых объявлений.
+     */
+    public List<Post> findPostLastDay() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime yesterday = now.minusDays(1);
+        return crudRepository.query(LAST_DAY, Post.class, Map.of("fTo", now, "fFrom", yesterday));
+    }
+
+    /**
+     * Найти в базе объявления с фотографией.
+     *
+     * @return Список найденых объявлений.
+     */
 
     public List<Post> findPostWithPhoto() {
         return crudRepository.query(WITH_PHOTO, Post.class);
     }
 
+    /**
+     * Найти в базе объявления по бренду автомобиля.
+     *
+     * @param brand Строка с названием бренда.
+     * @return Список найденых объявлений.
+     */
+
     public List<Post> findPostOfSpecificBrand(String brand) {
-        return crudRepository.query(SPECIFIC_BRAND, Post.class, Map.of("tBrand", "%" + brand + "%"));
+        return crudRepository.query(SPECIFIC_BRAND, Post.class, Map.of("tBrand", brand));
     }
 }
