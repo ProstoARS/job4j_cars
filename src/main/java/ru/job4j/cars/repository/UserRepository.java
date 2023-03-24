@@ -92,7 +92,7 @@ public class UserRepository {
      * @param login login.
      * @return Optional с пользователем или пустой.
      */
-    public Optional<User> findByLogin(String login) {
+    public Optional<User> findByLoginAndPassword(String login, String password) {
         Optional<User> optionalUser = Optional.empty();
         try {
            optionalUser = crudRepository.optional(

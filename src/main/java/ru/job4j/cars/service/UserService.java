@@ -38,7 +38,7 @@ public class UserService {
         return userRepository.findByLikeLogin(key);
     }
 
-    public Optional<User> findByLogin(String login) {
-        return userRepository.findByLogin(login);
+    public Optional<User> findByLoginAndPassword(String login, String password) {
+        return userRepository.findByLoginAndPassword(login, password);
     }
 }

@@ -136,6 +136,6 @@ class UserRepositoryTest {
                 .build();
         userRepository.create(user1);
         userRepository.create(user2);
-        assertThat(userRepository.findByLogin("Peter1").get()).isEqualTo(user2);
+        assertThat(userRepository.findByLoginAndPassword("Peter1", "14").get()).isEqualTo(user2);
     }
 }
