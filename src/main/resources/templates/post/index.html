@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <title>Cars</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" th:href="@{/index}">Cars</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="#">Все объявления<span class="sr-only">(current)</span></a>
+<!--            <a class="nav-item nav-link" th:href="@{/tasks/allNew}">Новые задачи</a>-->
+<!--            <a class="nav-item nav-link" th:href="@{/tasks/allDone}">Выпоненные задачи</a>-->
+<!--            <a class="nav-item nav-link" th:href="@{/tasks/formAdd}">Добавить задание</a>-->
+            <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
+                <span th:text="${user.name}"></span>
+                <span> | Войти</span>
+            </a>
+            <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
+                <span th:text="${user.name}"></span>
+                <span> | Выйти</span>
+            </a>
+        </div>
+    </div>
+</nav>
+<div class="row pl-5 pr-5 pt-2">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Объявление</th>
+            <th scope="col">Время размещения</th>
+            <th scope="col">Добавил</th>
+<!--            <th scope="col">Статус</th>-->
+<!--            <th scope="col">Приоритет</th>-->
+<!--            <th scope="col">Категория</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post: ${posts}">
+            <td th:text="${post.id}">
+            <td>
+                <a th:href="@{|/posts/description/${post.getId()}|}">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <span th:text="${post.name}"></span>
+            <td th:text="${#temporals.format(post.createdPost, 'dd-MM-yyyy HH:mm')}">
+            <td th:text="${post.user.login}">
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

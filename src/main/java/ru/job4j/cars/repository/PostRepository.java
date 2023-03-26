@@ -20,6 +20,11 @@ public class PostRepository {
             WHERE id = :tId
             """;
 
+    private static final String FIND_ALL = """
+            FROM Post p
+            ORDER BY p.id
+            """;
+
     private static final String LAST_DAY = """
             FROM Post WHERE created BETWEEN :fFrom AND :fTo
             """;
@@ -71,6 +76,15 @@ public class PostRepository {
             log.error(e.getMessage(), e);
         }
         return postOptional;
+    }
+
+    /**
+     * Найти в базе все объявления.
+     * @return Список найденых объявлений.
+     */
+
+    public List<Post> findAll() {
+        return crudRepository.query(FIND_ALL, Post.class);
     }
 
     /**
