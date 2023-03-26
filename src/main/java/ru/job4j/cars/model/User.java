@@ -25,4 +25,6 @@ public class User {
     @ManyToMany(mappedBy = "participates")
     @ToString.Exclude
     private List<Post> posts = new ArrayList<>();
+    @Column(name = "time_zone")
+    private String timeZone;
 }
