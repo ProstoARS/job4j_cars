@@ -1,4 +1,4 @@
-# job4j_cinema
+# job4j_cars
 
 ### Описание приложения
 Реализовываем магазин по продаже машин.
@@ -6,7 +6,7 @@
 - Java 17
 - Spring boot 
 - Thymeleaf
-- Spring JDBC 
+- Hibernate 
 - Liquibase 
 - PostgreSQL 
 

@@ -17,8 +17,7 @@ public class CarRepository {
     /**
      * Сохранить в базе.
      * @param car автомобиль.
-     * @return Optional с автомобилем с id.
-     * @exception Optional пустой.
+     * @return Optional с автомобилем с id, иначе Optional.empty().
      */
 
     public Optional<Car> createCar(Car car) {

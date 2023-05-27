@@ -23,12 +23,11 @@ public class Post {
     @Column(name = "created")
     private LocalDateTime createdPost;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "auto_user_id")
     private User user;
 
-    @OneToMany
-    @JoinColumn(name = "post_id")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<PriceHistory> priceHistories = new ArrayList<>();
 
@@ -40,7 +39,7 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> participates = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id")
     private Car car;
 

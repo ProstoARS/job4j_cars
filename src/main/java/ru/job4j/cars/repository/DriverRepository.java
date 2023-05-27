@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Driver;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -12,13 +13,23 @@ import java.util.Optional;
 @Slf4j
 public class DriverRepository {
 
+    private static final String FIND_ALL = "FROM Driver";
     private final CrudRepository crudRepository;
+
+    /**
+     * Найти всех в базе
+     *
+     * @return список водителей
+     */
+
+    public List<Driver> findAll() {
+     return crudRepository.query(FIND_ALL, Driver.class);
+    }
 
     /**
      * Сохранить в базе.
      * @param driver водитель.
-     * @return Optional с водителем с id.
-     * @exception Optional пустой.
+     * @return Optional с водителем с id, иначе Optional.empty().
      */
 
     public Optional<Driver> createDriver(Driver driver) {

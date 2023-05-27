@@ -46,8 +46,7 @@ public class PostRepository {
      * Сохранить в базе.
      *
      * @param post объявление.
-     * @return Optional с объявлением с id.
-     * @throws Optional пустой.
+     * @return Optional с объявлением с id, иначе Optional.empty().
      */
 
     public Optional<Post> createPost(Post post) {
@@ -65,8 +64,7 @@ public class PostRepository {
      * Найти в базе по идентификатору.
      *
      * @param id идентификатор объявления.
-     * @return Optional с объявлением с id.
-     * @throws Optional пустой.
+     * @return Optional с объявлением с id, иначе Optional.empty().
      */
     public Optional<Post> findPostById(int id) {
         Optional<Post> postOptional = Optional.empty();

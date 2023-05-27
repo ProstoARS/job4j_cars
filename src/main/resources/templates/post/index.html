@@ -35,7 +35,7 @@
             <a class="nav-item nav-link active" href="#">Все объявления<span class="sr-only">(current)</span></a>
 <!--            <a class="nav-item nav-link" th:href="@{/tasks/allNew}">Новые задачи</a>-->
 <!--            <a class="nav-item nav-link" th:href="@{/tasks/allDone}">Выпоненные задачи</a>-->
-<!--            <a class="nav-item nav-link" th:href="@{/tasks/formAdd}">Добавить задание</a>-->
+            <a class="nav-item nav-link" th:href="@{/posts/createPost}">Добавить объявление</a>
             <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
                 <span th:text="${user.name}"></span>
                 <span> | Войти</span>
@@ -64,10 +64,13 @@
         <tr th:each="post: ${posts}">
             <td th:text="${post.id}">
             <td>
-                <a th:href="@{|/posts/description/${post.getId()}|}">
+                <a th:href="@{|/posts/description/${post.id}|}">
                     <i class="fa fa-edit"></i>
                 </a>
                 <span th:text="${post.name}"></span>
+                <span>
+                    <img th:width="70" th:high="70" th:src="@{|/posts/photoCar/${post.id}}">
+                </span>
             <td th:text="${#temporals.format(post.createdPost, 'dd-MM-yyyy HH:mm')}">
             <td th:text="${post.user.login}">
         </tbody>

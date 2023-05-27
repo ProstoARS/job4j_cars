@@ -29,8 +29,7 @@ public class EngineRepository {
     /**
      * Сохранить в базе.
      * @param engine двигатель.
-     * @return Optional с двигателем с id.
-     * @exception Optional пустой.
+     * @return Optional с двигателем с id, иначе Optional.empty().
      */
 
     public Optional<Engine> createEngine(Engine engine) {
