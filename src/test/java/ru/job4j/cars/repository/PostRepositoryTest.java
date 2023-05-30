@@ -140,11 +140,13 @@ class PostRepositoryTest {
         engineRepository.createEngine(engine);
         engineRepository.createEngine(engine2);
         Car car = Car.builder()
-                .name("Lada")
+                .brand("Lada")
+                .model("priora")
                 .engine(engine)
                 .build();
         Car car2 = Car.builder()
-                .name("Zil")
+                .brand("Zil")
+                .model("4334")
                 .engine(engine2)
                 .build();
         CarRepository carRepository = new CarRepository(crudRepository);

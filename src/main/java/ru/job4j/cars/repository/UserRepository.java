@@ -3,6 +3,7 @@ package ru.job4j.cars.repository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import ru.job4j.cars.config.HibernateConfig;
 import ru.job4j.cars.model.User;
 
 import java.util.List;
@@ -13,7 +14,32 @@ import java.util.Optional;
 @AllArgsConstructor
 @Slf4j
 public class UserRepository {
+
+    private static final String DELETE_USER_BY_ID = """
+            delete from User
+            where id = :fId
+            """;
+    private static final String FIND_USER_BY_LIKE_LOGIN = """
+            from User
+            where login like :fKey
+            """;
+    private static final String FIND_USER_BY_LOGIN_AND_PASSWORD = """
+            from User
+            where login = :fLogin
+            and password= :fPassword
+            """;
+
+    private static final String FIND_ALL_USERS = """
+            from User
+            order by id asc
+            """;
+
+    private static final String FIND_USER_BY_ID = """
+            from User
+            where id = :fId
+            """;
     private final CrudRepository crudRepository;
+
 
     /**
      * Сохранить в базе.
@@ -45,7 +71,7 @@ public class UserRepository {
      */
     public void delete(int userId) {
         crudRepository.run(
-                "delete from User where id = :fId",
+                DELETE_USER_BY_ID,
                 Map.of("fId", userId)
         );
     }
@@ -55,7 +81,7 @@ public class UserRepository {
      * @return список пользователей.
      */
     public List<User> findAllUsersOrderById() {
-        return crudRepository.query("from User order by id asc", User.class);
+        return crudRepository.query(FIND_ALL_USERS, User.class);
     }
 
     /**
@@ -66,7 +92,7 @@ public class UserRepository {
         Optional<User> optionalUser = Optional.empty();
         try {
             optionalUser = crudRepository.optional(
-                    "from User where id = :fId", User.class,
+                    FIND_USER_BY_ID, User.class,
                     Map.of("fId", id)
             );
         } catch (Exception e) {
@@ -82,22 +108,23 @@ public class UserRepository {
      */
     public List<User> findByLikeLogin(String key) {
         return crudRepository.query(
-                "from User where login like :fKey", User.class,
+                FIND_USER_BY_LIKE_LOGIN, User.class,
                 Map.of("fKey", "%" + key + "%")
         );
     }
 
     /**
-     * Найти пользователя по login.
+     * Найти пользователя по логину и паролю.
      * @param login login.
+     * @param password password.
      * @return Optional с пользователем или пустой.
      */
     public Optional<User> findByLoginAndPassword(String login, String password) {
         Optional<User> optionalUser = Optional.empty();
         try {
            optionalUser = crudRepository.optional(
-                    "from User where login = :fLogin", User.class,
-                    Map.of("fLogin", login)
+                   FIND_USER_BY_LOGIN_AND_PASSWORD, User.class,
+                    Map.of("fLogin", login, "fPassword", password)
             );
         } catch (Exception e) {
             log.error(e.getMessage(), e);

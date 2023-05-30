@@ -37,7 +37,7 @@ public class PostRepository {
     private static final String SPECIFIC_BRAND = """
             FROM Post p
             JOIN fetch p.car c
-            WHERE c.name = :tBrand
+            WHERE c.brand = :tBrand
             """;
 
     private final CrudRepository crudRepository;

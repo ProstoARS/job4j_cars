@@ -54,7 +54,7 @@ public class PostController {
     public String createPost(@ModelAttribute Post post, HttpSession session,
                              @ModelAttribute("engineId") int engineId,
                              @ModelAttribute("price") long price,
-                             @ModelAttribute("driver") String driverName,
+                             @ModelAttribute("driverName") String driverName,
                              @RequestParam("file") MultipartFile file) throws IOException {
         Optional<Engine> engine = engineService.findById(engineId);
         if (engine.isEmpty()) {
@@ -101,7 +101,7 @@ public class PostController {
                 .body(new ByteArrayResource(post.getPhoto()));
     }
 
-    @GetMapping("/participate/{postId}")
+    @PostMapping("/participate/{postId}")
     public String subscribe(@ModelAttribute User user, @PathVariable("postId") int postId) {
         user.getPosts().add(postService.findPostById(postId).get());
         return "redirect:/post/postInfo";

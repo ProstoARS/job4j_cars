@@ -36,12 +36,12 @@
 <!--            <a class="nav-item nav-link" th:href="@{/tasks/allNew}">Новые задачи</a>-->
 <!--            <a class="nav-item nav-link" th:href="@{/tasks/allDone}">Выпоненные задачи</a>-->
             <a class="nav-item nav-link" th:href="@{/posts/createPost}">Добавить объявление</a>
-            <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
-                <span th:text="${user.name}"></span>
+            <a class="nav-item nav-link" th:if="${user.login == 'Гость'}" th:href="@{/loginPage}">
+                <span th:text="${user.login}"></span>
                 <span> | Войти</span>
             </a>
-            <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
-                <span th:text="${user.name}"></span>
+            <a class="nav-item nav-link" th:if="${user.login != 'Гость'}" th:href="@{/logout}">
+                <span th:text="${user.login}"></span>
                 <span> | Выйти</span>
             </a>
         </div>
