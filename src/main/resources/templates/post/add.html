@@ -31,12 +31,12 @@
         <div class="navbar-nav">
             <a class="nav-item nav-link active" th:href="@{/posts/index}">Все объявления</a>
             <a class="nav-item nav-link active" href="#">Добавить объявление<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
-                <span th:text="${user.name}"></span>
+            <a class="nav-item nav-link" th:if="${user.login == 'Гость'}" th:href="@{/loginPage}">
+                <span th:text="${user.login}"></span>
                 <span> | Войти</span>
             </a>
-            <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
-                <span th:text="${user.name}"></span>
+            <a class="nav-item nav-link" th:if="${user.login != 'Гость'}" th:href="@{/logout}">
+                <span th:text="${user.login}"></span>
                 <span> | Выйти</span>
             </a>
         </div>
@@ -47,7 +47,7 @@
         <div class="card-header">
             Новое объявление.
         </div>
-        <form th:action="@{/createPost}" th:object="${post}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/posts/createPost}" th:object="${post}" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <div class="form-group pl-3 pr-3 pt-2">
                     <label for="name"><b>Название</b></label>

@@ -22,6 +22,8 @@ public class PostRepository {
 
     private static final String FIND_ALL = """
             FROM Post p
+            JOIN FETCH p.car
+            JOIN FETCH p.user
             ORDER BY p.id
             """;
 
