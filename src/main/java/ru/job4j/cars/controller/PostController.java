@@ -74,7 +74,7 @@ public class PostController {
         post.setPhoto(file.getBytes());
         post.setUser(SessionUser.getSessionUser(session));
         postService.createPost(post);
-        return "redirect: /openPost" + post.getId();
+        return "redirect: post/postInfo" + post.getId();
     }
 
     @GetMapping("/openPost/{postId}")

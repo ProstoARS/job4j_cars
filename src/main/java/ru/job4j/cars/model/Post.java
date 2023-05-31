@@ -21,7 +21,7 @@ public class Post {
     private int id;
     private String description;
     @Column(name = "created")
-    private LocalDateTime createdPost;
+    private LocalDateTime createdPost = LocalDateTime.now();
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "auto_user_id")
