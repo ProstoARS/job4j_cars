@@ -3,14 +3,22 @@ package ru.job4j.cars.repository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.PriceHistory;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 @Slf4j
 public class PriceHistoryRepository {
+
+    private static final String FIND_PH_BY_POST_ID = """
+            FROM PriceHistory ph
+            WHERE ph.post = :tPost
+            """;
 
     CrudRepository crudRepository;
 
@@ -28,5 +36,16 @@ public class PriceHistoryRepository {
             log.error(e.getMessage(), e);
         }
         return optionalPriceHistory;
+    }
+
+    /**
+     * Найти Историю цены по идентификатору поста.
+     *
+     * @param post идентификатор поста.
+     * @return List с историями цены.
+     */
+
+    public List<PriceHistory> findPhByPost(Post post) {
+        return crudRepository.query(FIND_PH_BY_POST_ID, PriceHistory.class, Map.of("tPost", post));
     }
 }

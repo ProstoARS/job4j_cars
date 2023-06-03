@@ -1,14 +1,18 @@
 package ru.job4j.cars.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
+import ru.job4j.cars.service.PostService;
 import ru.job4j.cars.service.UserService;
+import ru.job4j.cars.util.SessionUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,9 +21,11 @@ import java.util.TimeZone;
 
 @Controller
 @AllArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
+    private final PostService postService;
 
     @GetMapping("/formRegistration")
     public String formRegistration(Model model, @RequestParam(name = "fail", required = false) Boolean fail) {
@@ -66,5 +72,29 @@ public class UserController {
     @GetMapping("/success")
     public String success() {
         return "success";
+    }
+
+    @PostMapping("/participate")
+    public String subscribe(HttpSession session, @ModelAttribute("postId") int postId) {
+        Optional<Post> optionalPost = postService.findPostWithParticipates(postId);
+        if (optionalPost.isEmpty()) {
+            log.error("Пост не вытащился с базы");
+            return "redirect:/error";
+        }
+        Post post = optionalPost.get();
+        int userId = SessionUser.getSessionUser(session).getId();
+        Optional<User> optionalUser = userService.findUserWithParticipates(userId);
+        if (optionalUser.isEmpty()) {
+            log.error("Юзер не вытащился с базы");
+            return "redirect:/error";
+        }
+        User user = optionalUser.get();
+        System.out.println(user);
+        if (!userService.addParticipate(user, post)) {
+            log.error("В коллекции не добавились данные");
+            return "redirect:/error";
+        }
+        userService.update(user);
+        return "redirect:/post/postInfo/" + postId;
     }
 }

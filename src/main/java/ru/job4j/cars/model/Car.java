@@ -22,15 +22,15 @@ public class Car {
     private String brand;
     private String model;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "engine_id")
     private Engine engine;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "history_owner",
-            joinColumns = @JoinColumn(name = "car_id", nullable = false, updatable = false),
-            inverseJoinColumns = @JoinColumn(name = "driver_id", nullable = false, updatable = false))
+            joinColumns = {@JoinColumn(name = "car_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "driver_id", nullable = false, updatable = false)})
     @ToString.Exclude
     private Set<Driver> owners = new HashSet<>();
 }

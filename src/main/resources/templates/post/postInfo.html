@@ -33,13 +33,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav">
             <a class="nav-item nav-link active" href="#">Все объявления<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" th:href="@{/tasks/formAdd}">Добавить объявление</a>
-            <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
-                <span th:text="${user.name}"></span>
+            <a class="nav-item nav-link" th:href="@{/posts/formAdd}">Добавить объявление</a>
+            <a class="nav-item nav-link" th:if="${user.login == 'Гость'}" th:href="@{/loginPage}">
+                <span th:text="${user.login}"></span>
                 <span> | Войти</span>
             </a>
-            <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
-                <span th:text="${user.name}"></span>
+            <a class="nav-item nav-link" th:if="${user.login != 'Гость'}" th:href="@{/logout}">
+                <span th:text="${user.login}"></span>
                 <span> | Выйти</span>
             </a>
         </div>
@@ -58,59 +58,65 @@
             <tbody>
             <tr>
                 <td>
-                    <p style="font-size: 18px"><b th:text="*{name}"></b></p>
+                    <label for="description" class="form-label">Описание</label>
+                    <textarea class="form-control" disabled rows="5" th:field="*{description}" name="description"
+                              id="description"></textarea>
                 </td>
                 <td>
                     <p style="font-size: 18px; display:inline;"><b th:text="${price} + Р"></b></p>
                 </td>
-                <td th:text="${#temporals.format(*{createdPost}, 'dd-MM-yyyy HH:mm')}"></td>
+                <td th:text="${#temporals.format(post.createdPost, 'dd-MM-yyyy HH:mm')}">
                 <td>
-                    <form th:if="${post.user.id == user.id}" th:action="@{/formEditPriceHistory}" style="display:inline;">
-                        <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">Изменить цену</button>
+                    <form th:if="${post.user.id == user.id}" th:action="@{/posts/formEditPriceHistory}"
+                          style="display:inline;">
+                        <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">Изменить
+                            цену
+                        </button>
                     </form>
-                <td/>
+                </td>
             </tr>
             </tbody>
         </table>
-        <div class="form-group pl-3 pr-3 pt-2">
-        <div class="card">
-            <img th:src="@{|posts/photoCar/*{id}}" class="card-img-top" alt="...">
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Описание</label>
-            <textarea class="form-control" disabled rows="5" th:field="*{description}" name="description"
-                      id="description"></textarea>
-        </div>
-        </div>
+        <span>
+            <img th:width="200" th:high="200" th:src="@{|/posts/photoCar/${post.id}}">
+        </span>
         <div class="form-group pl-3 pr-3 pt-2">
             <form class="form-floating" th:object="${car}">
                 <div class="mb-3">
-                    <br>
-                    <label for="brand" class="form-label">Марка авто</label>
-                    <input class="form-control" th:field="*{brand}" id="brand" disabled="disabled">
-                    <br>
-                    <label for="model" class="form-label">Модель авто</label>
-                    <input class="form-control" disabled="disabled" th:field="*{model}" name="model" id="model">
-                    <br>
-                    <label for="engine" class="form-check-label">Двигатель</label>
-                    <input class="form-control" th:field="*{engine}" name="engine" id="engine" disabled="disabled">
+                    <label><b>Марка авто</b></label>
+                    <input type="text" th:field="*{brand}" disabled="disabled">
+                    <label><b>Модель авто</b></label>
+                    <input type="text" disabled="disabled" th:field="*{model}">
+                    <label><b>Двигатель</b></label>
+                    <input type="text" th:field="*{engine.name}" disabled="disabled">
                     <br>
                     <br>
-                    <label for="drivers" class="form-check-label">Водители</label>
-                    <ol th:each="owner: *{owners}">
-                        <li class="form-control" th:field="${owner.name}" id="drivers"></li>
-                    </ol>
-                    <br>
+                    <label><b>Владельцы</b></label>
+                    <p style="margin-left: 40px" th:each="owner: ${owners}" th:text="${owner.name}">
+                        <br>
                 </div>
             </form>
         </div>
         <div class="form-group pl-3 pr-3 pt-2">
-            <label for="priceHistories" class="form-check-label">Изменения цены</label>
-            <ol th:each="ph: ${priceHistories}">
-                <li class="form-control" th:field="${ph.after}" id="priceHistories"></li>
-            </ol>
-            <form class="btn btn-primary" method="POST" th:action="@{|/posts/participate/${post.getId()}|}" style="width: 100%">
-                <button class="btn btn-success" role="button">Подписаться</button>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Изменения цены</th>
+                    <th scope="col">Дата изменения</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ph: ${priceHistories}">
+                    <td th:text="${ph.after}">
+                    <td th:text="${#temporals.format(ph.created, 'dd-MM-yyyy HH:mm')}">
+                </tbody>
+            </table>
+            <form method="POST" th:if="${user.login != 'Гость'}" th:action="@{/participate}" style="display:inline">
+                <button type="submit" name="postId" th:value="${post.id}" class="btn btn-success">Подписаться</button>
+            </form>
+            <form th:if="${user.login == 'Гость'}" th:action="@{/loginPage}"
+                  style="display:inline">
+                <button type="submit" class="btn btn-success">Войти для подписки</button>
             </form>
         </div>
     </div>

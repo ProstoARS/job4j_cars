@@ -1,6 +1,5 @@
 package ru.job4j.cars.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -31,6 +30,10 @@ public class PostService {
         return postRepository.findPostById(id);
     }
 
+    public Optional<Post> findPostWithParticipates(int id) {
+        return postRepository.findPostWithParticipates(id);
+    }
+
     public List<Post> findAll(ZoneId zoneId) {
         return postRepository.findAll()
                 .stream()
@@ -50,10 +53,9 @@ public class PostService {
         return postRepository.findPostOfSpecificBrand(brand);
     }
 
-    public Post changePostTimeZone(Post post, ZoneId zoneId) {
+    public void changePostTimeZone(Post post, ZoneId zoneId) {
         LocalDateTime createdWithTimeZone = post.getCreatedPost().atZone(ZoneId.of(defaultTimeZone))
                 .withZoneSameInstant(zoneId).toLocalDateTime();
         post.setCreatedPost(createdWithTimeZone);
-        return post;
     }
 }

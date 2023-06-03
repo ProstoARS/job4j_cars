@@ -68,6 +68,7 @@ public class PostController {
         PriceHistory priceHistory = PriceHistory.builder()
                 .before(0)
                 .after(price)
+                .post(post)
                 .build();
         priceHistoryService.createPriceHistory(priceHistory);
         post.setPriceHistories(List.of(priceHistory));
@@ -80,13 +81,16 @@ public class PostController {
     @GetMapping("/openPost/{postId}")
     public String openPost(Model model, HttpSession session, @PathVariable("postId") int id) {
         Post post = postService.findPostById(id).get();
-        List<PriceHistory> priceHistories = post.getPriceHistories();
+        List<PriceHistory> priceHistories = priceHistoryService.findPhByPost(post);
         priceHistories.sort(Comparator.comparing(PriceHistory::getCreated));
         PriceHistory lastPrice = priceHistories.get(priceHistories.size() - 1);
+        Optional<Car> car = carService.findById(post.getCar().getId());
+        Set<Driver> owners = car.get().getOwners();
         model.addAttribute("user", SessionUser.getSessionUser(session));
         model.addAttribute("post", post);
         model.addAttribute("price", lastPrice.getAfter());
-        model.addAttribute("car", post.getCar());
+        model.addAttribute("car", car);
+        model.addAttribute("owners", owners);
         model.addAttribute("priceHistories", priceHistories);
         return "post/postInfo";
     }
@@ -99,11 +103,5 @@ public class PostController {
                 .contentLength(post.getPhoto().length)
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(new ByteArrayResource(post.getPhoto()));
-    }
-
-    @PostMapping("/participate/{postId}")
-    public String subscribe(@ModelAttribute User user, @PathVariable("postId") int postId) {
-        user.getPosts().add(postService.findPostById(postId).get());
-        return "redirect:/post/postInfo";
     }
 }

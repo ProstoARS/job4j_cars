@@ -59,7 +59,7 @@
         <tr th:each="post: ${posts}">
             <td th:text="${post.id}">
             <td>
-                <a th:href="@{|/posts/description/${post.id}|}">
+                <a th:href="@{|/posts/openPost/${post.id}|}">
                     <i class="fa fa-edit"></i>
                 </a>
                 <span th:text="${post.car.brand}"></span>

@@ -16,4 +16,8 @@ public class CarService {
     public Optional<Car> createCar(Car car) {
         return carRepository.createCar(car);
     }
+
+    public Optional<Car> findById(int id) {
+        return carRepository.findCarById(id);
+    }
 }

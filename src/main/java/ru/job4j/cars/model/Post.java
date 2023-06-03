@@ -31,12 +31,12 @@ public class Post {
     @ToString.Exclude
     private List<PriceHistory> priceHistories = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ToString.Exclude
     @JoinTable(
             name = "participates",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private List<User> participates = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

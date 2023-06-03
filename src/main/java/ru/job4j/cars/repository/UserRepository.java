@@ -3,7 +3,6 @@ package ru.job4j.cars.repository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import ru.job4j.cars.config.HibernateConfig;
 import ru.job4j.cars.model.User;
 
 import java.util.List;
@@ -16,27 +15,33 @@ import java.util.Optional;
 public class UserRepository {
 
     private static final String DELETE_USER_BY_ID = """
-            delete from User
-            where id = :fId
+            DELETE FROM User
+            WHERE id = :fId
             """;
     private static final String FIND_USER_BY_LIKE_LOGIN = """
-            from User
-            where login like :fKey
+            FROM User
+            WHERE login LIKE :fKey
             """;
     private static final String FIND_USER_BY_LOGIN_AND_PASSWORD = """
-            from User
-            where login = :fLogin
-            and password= :fPassword
+            FROM User
+            WHERE login = :fLogin
+            AND password= :fPassword
             """;
 
     private static final String FIND_ALL_USERS = """
-            from User
-            order by id asc
+            FROM User
+            ORDER BY id asc
             """;
 
     private static final String FIND_USER_BY_ID = """
-            from User
-            where id = :fId
+            FROM User u
+            WHERE u.id = :fId
+            """;
+
+    private static final String FIND_USER_WITH_PARTICIPATES = """
+            FROM User u
+            JOIN FETCH u.posts
+            WHERE u.id = :fId
             """;
     private final CrudRepository crudRepository;
 
@@ -130,6 +135,17 @@ public class UserRepository {
             log.error(e.getMessage(), e);
         }
         return optionalUser;
+    }
+
+    /**
+     * Найти пользователя с подписками.
+     * @param userId идентификатор пользователя.
+     * @return Optional с пользователем или пустой.
+     */
+    public Optional<User> findParticipatesByUser(int userId) {
+        return crudRepository.optional(
+                FIND_USER_WITH_PARTICIPATES, User.class,
+                Map.of("fId", userId));
     }
 
     public CrudRepository getCrudRepository() {

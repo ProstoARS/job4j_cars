@@ -16,8 +16,17 @@ import java.util.Optional;
 public class PostRepository {
 
     private static final String FIND_BY_ID = """
-            FROM Post
-            WHERE id = :tId
+            FROM Post p
+            JOIN FETCH p.user
+            WHERE p.id = :tId
+            """;
+
+    private static final String FIND_POST_WITH_PARTICIPATES = """
+            FROM Post p
+            JOIN FETCH p.user
+            JOIN FETCH p.car
+            JOIN FETCH p.participate
+            WHERE p.id = :tId
             """;
 
     private static final String FIND_ALL = """
@@ -28,7 +37,9 @@ public class PostRepository {
             """;
 
     private static final String LAST_DAY = """
-            FROM Post WHERE created BETWEEN :fFrom AND :fTo
+            FROM Post
+            WHERE created
+            BETWEEN :fFrom AND :fTo
             """;
 
     private static final String WITH_PHOTO = """
@@ -64,7 +75,6 @@ public class PostRepository {
 
     /**
      * Найти в базе по идентификатору.
-     *
      * @param id идентификатор объявления.
      * @return Optional с объявлением с id, иначе Optional.empty().
      */
@@ -72,6 +82,22 @@ public class PostRepository {
         Optional<Post> postOptional = Optional.empty();
         try {
             postOptional = crudRepository.optional(FIND_BY_ID, Post.class, Map.of("tId", id));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return postOptional;
+    }
+
+    /**
+     * Найти объявление по идентификатору со списком подписок.
+     *
+     * @param id идентификатор объявления.
+     * @return Optional  с объявлением, иначе Optional.empty().
+     */
+    public Optional<Post> findPostWithParticipates(int id) {
+        Optional<Post> postOptional = Optional.empty();
+        try {
+            postOptional = crudRepository.optional(FIND_POST_WITH_PARTICIPATES, Post.class, Map.of("tId", id));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
