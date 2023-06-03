@@ -138,23 +138,4 @@ class UserRepositoryTest {
         userRepository.create(user2);
         assertThat(userRepository.findByLoginAndPassword("Peter1", "14").get()).isEqualTo(user2);
     }
-
-//    @Test
-//    void whenUpdateUserUseParticipate() {
-//        User user1 = User.builder()
-//                .login("User2")
-//                .password("13")
-//                .build();
-//        userRepository.create(user1);
-//        Engine engine = Engine.builder()
-//                .name("Uzbek")
-//                .build();
-//        EngineRepository engineRepository = new EngineRepository(new CrudRepository());
-//        Post post = Post.builder()
-//                .user(user1)
-//                .build();
-//        postRepository.createPost(post);
-//        user1.setPosts(Set.of(post));
-//        assertThat(userRepository.findById(user1.getId()).get().getPosts().stream().iterator().next()).isEqualTo(post);
-//    }
 }

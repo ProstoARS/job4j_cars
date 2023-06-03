@@ -170,30 +170,4 @@ class PostRepositoryTest {
         assertThat(postRepository.findPostOfSpecificBrand("Lada")).isEqualTo(posts);
     }
 
-//    @Test
-//    void whenFindOwnersCar() {
-//        Engine engine = Engine.builder()
-//                .name("Uzbek")
-//                .build();
-//        EngineRepository engineRepository = new EngineRepository(crudRepository);
-//        engineRepository.createEngine(engine);
-//        Driver driver = Driver.builder().name("Костян").build();
-//        Car car = Car.builder()
-//                .brand("Lada")
-//                .model("priora")
-//                .engine(engine)
-//                .owners(List.of(driver))
-//                .build();
-//        CarRepository carRepository = new CarRepository(crudRepository);
-//        carRepository.createCar(car);
-//        Post post = Post.builder()
-//                .description("Test1")
-//                .user(user)
-//                .car(car)
-//                .build();
-//        PostRepository postRepository = new PostRepository(crudRepository);
-//        postRepository.createPost(post);
-//        assertThat(postRepository.findPostById(post.getId()).get().getCar().getOwners().get(driver.getId()).getName())
-//                .isEqualTo("Костян");
-//    }
 }
