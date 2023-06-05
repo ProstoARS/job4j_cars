@@ -17,6 +17,7 @@ public class PriceHistoryRepository {
 
     private static final String FIND_PH_BY_POST_ID = """
             FROM PriceHistory ph
+            JOIN FETCH ph.post
             WHERE ph.post = :tPost
             """;
 
@@ -40,7 +41,6 @@ public class PriceHistoryRepository {
 
     /**
      * Найти Историю цены по идентификатору поста.
-     *
      * @param post идентификатор поста.
      * @return List с историями цены.
      */

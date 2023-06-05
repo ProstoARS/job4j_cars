@@ -26,7 +26,7 @@ public class Car {
     @JoinColumn(name = "engine_id")
     private Engine engine;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "history_owner",
             joinColumns = {@JoinColumn(name = "car_id", nullable = false, updatable = false)},

@@ -5,8 +5,13 @@ import org.hibernate.Session;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
+import ru.job4j.cars.service.UserService;
+
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,20 +19,25 @@ import static org.assertj.core.api.Assertions.*;
 
 class UserRepositoryTest {
 
-    private static UserRepository userRepository;
+    private static CrudRepository crudRepository;
 
     @BeforeAll
     public static void initHibernateTest() {
-        CrudRepository crudRepository = new CrudRepository(new TestHibernateConfig().sf());
-        userRepository = new UserRepository(crudRepository);
+        crudRepository = new CrudRepository(new TestHibernateConfig().sf());
     }
 
     @AfterEach
     public void wipeTable() {
-        Session session = userRepository.getCrudRepository().getSf().openSession();
+        Session session = crudRepository.getSf().openSession();
         try {
             session.beginTransaction();
+            session.createQuery("DELETE FROM Post")
+                    .executeUpdate();
             session.createQuery("DELETE FROM User")
+                    .executeUpdate();
+            session.createQuery("DELETE FROM Car")
+                    .executeUpdate();
+            session.createQuery("DELETE FROM Engine")
                     .executeUpdate();
             session.getTransaction().commit();
             session.close();
@@ -39,9 +49,10 @@ class UserRepositoryTest {
     @Test
     public void whenCreateUserAndFindById() throws SQLException {
         User user = User.builder()
-                .login("User1")
+                .login("User17")
                 .password("12")
                 .build();
+        UserRepository userRepository = new UserRepository(crudRepository);
         Optional<User> optionalUser = userRepository.create(user);
         int userId;
         if (optionalUser.isPresent()) {
@@ -58,6 +69,7 @@ class UserRepositoryTest {
                 .login("User1")
                 .password("12")
                 .build();
+        UserRepository userRepository = new UserRepository(crudRepository);
         Optional<User> optionalUser = userRepository.create(user);
         user.setPassword("13");
         int userId;
@@ -76,6 +88,7 @@ class UserRepositoryTest {
                 .login("User1")
                 .password("12")
                 .build();
+        UserRepository userRepository = new UserRepository(crudRepository);
         Optional<User> optionalUser = userRepository.create(user);
         int userId;
         if (optionalUser.isPresent()) {
@@ -97,6 +110,7 @@ class UserRepositoryTest {
                 .login("User2")
                 .password("13")
                 .build();
+        UserRepository userRepository = new UserRepository(crudRepository);
         userRepository.create(user1);
         userRepository.create(user2);
         List<User> users = List.of(user1, user2);
@@ -117,6 +131,7 @@ class UserRepositoryTest {
                 .login("Peter1")
                 .password("14")
                 .build();
+        UserRepository userRepository = new UserRepository(crudRepository);
         userRepository.create(user1);
         userRepository.create(user2);
         userRepository.create(user3);
@@ -134,8 +149,55 @@ class UserRepositoryTest {
                 .login("Peter1")
                 .password("14")
                 .build();
+        UserRepository userRepository = new UserRepository(crudRepository);
         userRepository.create(user1);
         userRepository.create(user2);
         assertThat(userRepository.findByLoginAndPassword("Peter1", "14").get()).isEqualTo(user2);
+    }
+
+    @Test
+    void whenUpdateUserUseParticipate() {
+        User user1 = User.builder()
+                .login("User1")
+                .password("13")
+                .build();
+        User user2 = User.builder()
+                .login("User2")
+                .password("14")
+                .posts(new ArrayList<>())
+                .build();
+        UserRepository userRepository = new UserRepository(crudRepository);
+        userRepository.create(user1);
+        userRepository.create(user2);
+        Post post = Post.builder()
+                .user(user1)
+                .participates(new ArrayList<>())
+                .build();
+        Post post2 = Post.builder()
+                .description("второй пост")
+                .user(user1)
+                .participates(new ArrayList<>())
+                .build();
+        PostRepository postRepository = new PostRepository(crudRepository);
+        postRepository.createPost(post);
+        postRepository.createPost(post2);
+
+        UserService userService = new UserService(userRepository);
+        if (userService.addParticipate(user2, post)) {
+            System.out.println("ОШИБКА!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
+
+        userRepository.update(user2);
+        Optional<User> participatesByUser1 = userRepository.findUserWithParticipates(user2.getId());
+        User ars = participatesByUser1.get();
+
+        userService.addParticipate(ars, post2);
+
+        userRepository.update(ars);
+
+        Optional<User> participatesByUser2 = userRepository.findUserWithParticipates(ars.getId());
+        Iterator<Post> iterator = participatesByUser2.get().getPosts().stream().iterator();
+        assertThat(iterator.next()).isEqualTo(post);
+        assertThat(iterator.next()).isEqualTo(post2);
     }
 }

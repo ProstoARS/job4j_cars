@@ -16,11 +16,9 @@ import ru.job4j.cars.util.SessionUser;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @AllArgsConstructor
@@ -58,7 +56,7 @@ public class PostController {
                              @RequestParam("file") MultipartFile file) throws IOException {
         Optional<Engine> engine = engineService.findById(engineId);
         if (engine.isEmpty()) {
-            return "redirect:/formAddPost";
+            return "redirect:/formAdd";
         }
         post.getCar().setEngine(engine.get());
         Driver driver = Driver.builder().name(driverName).build();
@@ -68,14 +66,14 @@ public class PostController {
         PriceHistory priceHistory = PriceHistory.builder()
                 .before(0)
                 .after(price)
-                .post(post)
+                .created(LocalDateTime.now())
                 .build();
-        priceHistoryService.createPriceHistory(priceHistory);
-        post.setPriceHistories(List.of(priceHistory));
+        post.setParticipates(new ArrayList<>());
+        post.getPriceHistories().add(priceHistory);
         post.setPhoto(file.getBytes());
         post.setUser(SessionUser.getSessionUser(session));
         postService.createPost(post);
-        return "redirect: post/postInfo" + post.getId();
+        return "redirect:/posts/openPost/" + post.getId();
     }
 
     @GetMapping("/openPost/{postId}")

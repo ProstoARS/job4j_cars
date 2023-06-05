@@ -45,18 +45,26 @@ public class UserService {
         return userRepository.findByLoginAndPassword(login, password);
     }
 
-    public Optional<User> findUserWithParticipates(int userId) {
-        return userRepository.findParticipatesByUser(userId);
+    public Optional<User> findUserWithParticipates(User user) {
+        Optional<User> optionalUser;
+        try {
+            optionalUser = userRepository.findUserWithParticipates(user.getId());
+        } catch (Exception e) {
+            log.error("Подписок ецё нет", e);
+            optionalUser = Optional.of(user);
+        }
+        return optionalUser;
     }
 
     public boolean addParticipate(User user, Post post) {
         boolean rsl = false;
         try {
             user.getPosts().add(post);
-            rsl = post.getParticipates().add(user);
+            post.getParticipates().add(user);
+            rsl = true;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        return rsl;
+        return !rsl;
     }
 }

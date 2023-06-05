@@ -29,6 +29,12 @@ public class PostRepository {
             WHERE p.id = :tId
             """;
 
+    private static final String FIND_POST_WITH_PRICE_HISTORY = """
+            FROM Post p
+            JOIN FETCH p.priceHistories
+            WHERE p.id = :tId
+            """;
+
     private static final String FIND_ALL = """
             FROM Post p
             JOIN FETCH p.car
@@ -143,5 +149,15 @@ public class PostRepository {
 
     public List<Post> findPostOfSpecificBrand(String brand) {
         return crudRepository.query(SPECIFIC_BRAND, Post.class, Map.of("tBrand", brand));
+    }
+
+    /**
+     * Найти в базе объявления с историей цен.
+     *
+     * @param id идентификатор пользователя.
+     * @return Optional  с объявлением либо Optional.empty().
+     */
+    public Optional<Post> findPostWithPriceHistory(int id) {
+        return crudRepository.optional(FIND_POST_WITH_PRICE_HISTORY, Post.class, Map.of("tId", id));
     }
 }

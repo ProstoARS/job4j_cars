@@ -1,6 +1,7 @@
 package ru.job4j.cars.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @PropertySource("classpath:application.properties")
 public class PostService {
@@ -30,9 +32,6 @@ public class PostService {
         return postRepository.findPostById(id);
     }
 
-    public Optional<Post> findPostWithParticipates(int id) {
-        return postRepository.findPostWithParticipates(id);
-    }
 
     public List<Post> findAll(ZoneId zoneId) {
         return postRepository.findAll()
@@ -51,6 +50,17 @@ public class PostService {
 
     public List<Post> findPostOfSpecificBrand(String brand) {
         return postRepository.findPostOfSpecificBrand(brand);
+    }
+
+    public Optional<Post> findPostWithPriceHistory(Post post) {
+        Optional<Post> optionalPost;
+        try {
+            optionalPost = postRepository.findPostWithPriceHistory(post.getId());
+        } catch (Exception e) {
+            log.error("Цены раньше не было", e);
+            optionalPost = Optional.of(post);
+        }
+        return optionalPost;
     }
 
     public void changePostTimeZone(Post post, ZoneId zoneId) {

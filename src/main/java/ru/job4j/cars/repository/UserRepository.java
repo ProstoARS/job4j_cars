@@ -142,7 +142,7 @@ public class UserRepository {
      * @param userId идентификатор пользователя.
      * @return Optional с пользователем или пустой.
      */
-    public Optional<User> findParticipatesByUser(int userId) {
+    public Optional<User> findUserWithParticipates(int userId) {
         return crudRepository.optional(
                 FIND_USER_WITH_PARTICIPATES, User.class,
                 Map.of("fId", userId));

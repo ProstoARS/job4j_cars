@@ -22,8 +22,12 @@ public class User {
     private String login;
     private String password;
 
-    @ManyToMany(mappedBy = "participates")
+    @ManyToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
+    @JoinTable(
+            name = "participates",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "post_id")})
     private List<Post> posts = new ArrayList<>();
     @Column(name = "time_zone")
     private String timeZone;

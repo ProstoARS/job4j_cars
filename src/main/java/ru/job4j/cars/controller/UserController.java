@@ -16,6 +16,7 @@ import ru.job4j.cars.util.SessionUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.TimeZone;
 
@@ -76,21 +77,19 @@ public class UserController {
 
     @PostMapping("/participate")
     public String subscribe(HttpSession session, @ModelAttribute("postId") int postId) {
-        Optional<Post> optionalPost = postService.findPostWithParticipates(postId);
+        Optional<Post> optionalPost = postService.findPostById(postId);
         if (optionalPost.isEmpty()) {
             log.error("Пост не вытащился с базы");
             return "redirect:/error";
         }
-        Post post = optionalPost.get();
-        int userId = SessionUser.getSessionUser(session).getId();
-        Optional<User> optionalUser = userService.findUserWithParticipates(userId);
-        if (optionalUser.isEmpty()) {
-            log.error("Юзер не вытащился с базы");
-            return "redirect:/error";
-        }
+        Post postById = optionalPost.get();
+        User sessionUser = SessionUser.getSessionUser(session);
+        sessionUser.setPosts(new ArrayList<>());
+        postById.setParticipates(new ArrayList<>());
+        Optional<User> optionalUser = userService.findUserWithParticipates(sessionUser);
         User user = optionalUser.get();
         System.out.println(user);
-        if (!userService.addParticipate(user, post)) {
+        if (userService.addParticipate(user, postById)) {
             log.error("В коллекции не добавились данные");
             return "redirect:/error";
         }

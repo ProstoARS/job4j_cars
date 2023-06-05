@@ -32,7 +32,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">Все объявления<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" th:href="@{/posts/index}">Все объявления<span class="sr-only">(current)</span></a>
             <a class="nav-item nav-link" th:href="@{/posts/formAdd}">Добавить объявление</a>
             <a class="nav-item nav-link" th:if="${user.login == 'Гость'}" th:href="@{/loginPage}">
                 <span th:text="${user.login}"></span>
