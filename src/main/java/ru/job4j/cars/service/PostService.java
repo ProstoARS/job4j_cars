@@ -63,6 +63,10 @@ public class PostService {
         return optionalPost;
     }
 
+    public Optional<Post> findPostWithParticipates(int id) {
+        return postRepository.findPostWithParticipates(id);
+    }
+
     public void changePostTimeZone(Post post, ZoneId zoneId) {
         LocalDateTime createdWithTimeZone = post.getCreatedPost().atZone(ZoneId.of(defaultTimeZone))
                 .withZoneSameInstant(zoneId).toLocalDateTime();

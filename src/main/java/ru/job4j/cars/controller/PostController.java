@@ -30,13 +30,15 @@ public class PostController {
     private final CarService carService;
     private final DriverService driverService;
     private final PriceHistoryService priceHistoryService;
+    private final UserService userService;
 
     @GetMapping("/index")
     public String index(Model model, HttpSession session) {
         User sessionUser = SessionUser.getSessionUser(session);
         String timeZone = sessionUser.getTimeZone();
+        List<Post> posts = postService.findAll(ZoneId.of(timeZone));
         model.addAttribute("user", sessionUser);
-        model.addAttribute("posts", postService.findAll(ZoneId.of(timeZone)));
+        model.addAttribute("posts", posts);
         return "post/index";
     }
 
@@ -84,12 +86,22 @@ public class PostController {
         PriceHistory lastPrice = priceHistories.get(priceHistories.size() - 1);
         Optional<Car> car = carService.findById(post.getCar().getId());
         Set<Driver> owners = car.get().getOwners();
-        model.addAttribute("user", SessionUser.getSessionUser(session));
+        User user = SessionUser.getSessionUser(session);
+        Optional<User> userWithParticipates = userService.findUserWithParticipates(user);
+        boolean checkParticipate = false;
+        List<Post> posts = userWithParticipates.get().getPosts();
+        if (!user.getLogin().equals("Гость") && !posts.isEmpty()) {
+            if (posts.contains(post)) {
+                checkParticipate = true;
+            }
+        }
+        model.addAttribute("user", user);
         model.addAttribute("post", post);
         model.addAttribute("price", lastPrice.getAfter());
         model.addAttribute("car", car);
         model.addAttribute("owners", owners);
         model.addAttribute("priceHistories", priceHistories);
+        model.addAttribute("checkParticipate", checkParticipate);
         return "post/postInfo";
     }
 

@@ -25,7 +25,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" th:href="@{/index}">Cars</a>
+    <a class="navbar-brand" th:href="@{/posts/index}">Cars</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -53,6 +53,7 @@
             <th scope="col">Объявление</th>
             <th scope="col">Время размещения</th>
             <th scope="col">Добавил</th>
+            <th scope="col">Подписка</th>
         </tr>
         </thead>
         <tbody>
@@ -69,6 +70,10 @@
                 </span>
             <td th:text="${#temporals.format(post.createdPost, 'dd-MM-yyyy HH:mm')}">
             <td th:text="${post.user.login}">
+            <td th:if="${user.login != 'Гость'}">
+                <span th:text="${post.participates.contains(user)} ? 'вы подписаны' : 'нет подписки'">
+                </span>
+            </td>
         </tbody>
     </table>
 </div>

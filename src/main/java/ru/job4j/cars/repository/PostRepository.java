@@ -36,9 +36,11 @@ public class PostRepository {
             """;
 
     private static final String FIND_ALL = """
+            SELECT DISTINCT p
             FROM Post p
             JOIN FETCH p.car
             JOIN FETCH p.user
+            LEFT JOIN FETCH p.participates
             ORDER BY p.id
             """;
 

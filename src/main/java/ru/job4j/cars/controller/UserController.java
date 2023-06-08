@@ -94,6 +94,6 @@ public class UserController {
             return "redirect:/error";
         }
         userService.update(user);
-        return "redirect:/post/postInfo/" + postId;
+        return "redirect:/posts/openPost/" + postId;
     }
 }

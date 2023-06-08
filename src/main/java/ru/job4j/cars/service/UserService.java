@@ -7,6 +7,7 @@ import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +51,8 @@ public class UserService {
         try {
             optionalUser = userRepository.findUserWithParticipates(user.getId());
         } catch (Exception e) {
-            log.error("Подписок ецё нет", e);
+            log.error("Подписок ещё нет", e);
+            user.setPosts(new ArrayList<>());
             optionalUser = Optional.of(user);
         }
         return optionalUser;
