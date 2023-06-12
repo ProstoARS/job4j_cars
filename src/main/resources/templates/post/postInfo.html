@@ -128,6 +128,11 @@
                         Убрать из подписки
                     </button>
             </form>
+            <form method="POST" th:if="${user.id == post.user.id}" th:action="@{/posts/delPost}">
+                <button type="submit" class="btn btn-primary mt-3" name="postId" th:value="${post.id}">
+                    Удалить пост
+                </button>
+            </form>
         </div>
     </div>
 </form>

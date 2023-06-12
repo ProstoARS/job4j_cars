@@ -44,9 +44,6 @@ public class UserRepository {
             WHERE u.id = :fId
             """;
 
-//    private static final String DELETE_PARTICIPATE_FROM_USER = """
-//
-//            """;
     private final CrudRepository crudRepository;
 
 

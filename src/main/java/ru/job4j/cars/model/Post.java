@@ -32,11 +32,11 @@ public class Post {
     @ToString.Exclude
     private List<PriceHistory> priceHistories = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "posts")
+    @ManyToMany(mappedBy = "posts", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<User> participates;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "car_id")
     private Car car;
 

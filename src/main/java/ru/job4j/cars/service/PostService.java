@@ -48,6 +48,10 @@ public class PostService {
         return postRepository.findPostWithPhoto();
     }
 
+    public boolean deleteFromPost(Post post) {
+        return postRepository.deleteFromPost(post);
+    }
+
     public List<Post> findPostOfSpecificBrand(String brand) {
         return postRepository.findPostOfSpecificBrand(brand);
     }

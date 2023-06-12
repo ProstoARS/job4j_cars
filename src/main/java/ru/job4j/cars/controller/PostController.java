@@ -58,7 +58,7 @@ public class PostController {
                              @RequestParam("file") MultipartFile file) throws IOException {
         Optional<Engine> engine = engineService.findById(engineId);
         if (engine.isEmpty()) {
-            return "redirect:/formAdd";
+            return "redirect:/posts/formAdd";
         }
         post.getCar().setEngine(engine.get());
         Driver driver = Driver.builder().name(driverName).build();
@@ -113,5 +113,17 @@ public class PostController {
                 .contentLength(post.getPhoto().length)
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(new ByteArrayResource(post.getPhoto()));
+    }
+
+    @PostMapping("/delPost")
+    public String deletePost(@ModelAttribute("postId") int id) {
+        Optional<Post> postById = postService.findPostById(id);
+        if (postById.isEmpty()) {
+            return "redirect:/error";
+        }
+        if (!postService.deleteFromPost(postById.get())) {
+            return "redirect:/error";
+        }
+        return "redirect:/posts/index";
     }
 }

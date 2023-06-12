@@ -53,7 +53,7 @@ public class UserService {
         } catch (Exception e) {
             log.error("Подписок ещё нет", e);
             user.setPosts(new ArrayList<>());
-            optionalUser = Optional.of(user);
+            return Optional.of(user);
         }
         return optionalUser;
     }

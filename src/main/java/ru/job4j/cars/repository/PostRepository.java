@@ -156,10 +156,27 @@ public class PostRepository {
     /**
      * Найти в базе объявления с историей цен.
      *
-     * @param id идентификатор пользователя.
+     * @param id идентификатор объявления.
      * @return Optional  с объявлением либо Optional.empty().
      */
     public Optional<Post> findPostWithPriceHistory(int id) {
         return crudRepository.optional(FIND_POST_WITH_PRICE_HISTORY, Post.class, Map.of("tId", id));
+    }
+
+    /**
+     * Удалить объявление.
+     *
+     * @param post объявление к удалению.
+     * @return boolean true если удаление прошло успешно.
+     */
+    public boolean deleteFromPost(Post post) {
+        boolean rsl = false;
+        try {
+            crudRepository.run(session -> session.delete(post));
+            rsl = true;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return rsl;
     }
 }
