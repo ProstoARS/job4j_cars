@@ -43,6 +43,10 @@ public class UserRepository {
             JOIN FETCH u.posts
             WHERE u.id = :fId
             """;
+
+//    private static final String DELETE_PARTICIPATE_FROM_USER = """
+//
+//            """;
     private final CrudRepository crudRepository;
 
 

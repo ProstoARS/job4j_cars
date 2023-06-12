@@ -69,4 +69,16 @@ public class UserService {
         }
         return !rsl;
     }
+
+    public boolean delParticipate(User user, Post post) {
+        boolean rsl = false;
+        try {
+            user.getPosts().remove(post);
+            post.getParticipates().remove(user);
+            rsl = true;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return !rsl;
+    }
 }

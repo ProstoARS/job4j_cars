@@ -69,8 +69,8 @@
                 <td>
                     <form th:if="${post.user.id == user.id}" th:action="@{/posts/formEditPriceHistory}"
                           style="display:inline;">
-                        <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">Изменить
-                            цену
+                        <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">
+                            Изменить цену
                         </button>
                     </form>
                 </td>
@@ -111,18 +111,22 @@
                     <td th:text="${#temporals.format(ph.created, 'dd-MM-yyyy HH:mm')}">
                 </tbody>
             </table>
-            <form method="POST" th:if="${user.login != 'Гость'}" th:action="@{/participate}" style="display:inline">
-                <div th:if="${checkParticipate}">
-                    <div th:text="${user.login} + ' вы подписаны на пост '">Hi, User</div>
-                </div>
-                <div th:unless="${checkParticipate}">
-                    <button type="submit" name="postId" th:value="${post.id}" class="btn btn-success">Подписаться
+            <form method="POST" th:if="${user.login != 'Гость' && user.id != post.user.id}" th:action="@{/participate}" style="display:inline">
+                <div th:if="${!checkParticipate}">
+                    <button type="submit" name="postId" th:value="${post.id}" class="btn btn-success">
+                        Подписаться
                     </button>
                 </div>
             </form>
             <form th:if="${user.login == 'Гость'}" th:action="@{/loginPage}"
                   style="display:inline">
                 <button type="submit" class="btn btn-success">Войти для подписки</button>
+            </form>
+            <form th:if="${checkParticipate}" method="POST" th:action="@{/delParticipate}">
+                <div th:text="${user.login} + ' вы подписаны на пост '">Hi, User</div>
+                    <button  type="submit" name="postId" th:value="${post.id}" class="btn btn-success">
+                        Убрать из подписки
+                    </button>
             </form>
         </div>
     </div>
