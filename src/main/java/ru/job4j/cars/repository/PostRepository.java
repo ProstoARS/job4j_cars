@@ -97,6 +97,14 @@ public class PostRepository {
     }
 
     /**
+     * Обновить в базе пользователя.
+     * @param post пользователь.
+     */
+    public void update(Post post) {
+        crudRepository.run(session -> session.merge(post));
+    }
+
+    /**
      * Найти объявление по идентификатору со списком подписок.
      *
      * @param id идентификатор объявления.

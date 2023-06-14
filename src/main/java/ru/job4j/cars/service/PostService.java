@@ -28,6 +28,10 @@ public class PostService {
         return postRepository.createPost(post);
     }
 
+    public void updatePost(Post post) {
+        postRepository.update(post);
+    }
+
     public Optional<Post> findPostById(int id) {
         return postRepository.findPostById(id);
     }

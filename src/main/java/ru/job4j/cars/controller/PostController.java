@@ -1,6 +1,7 @@
 package ru.job4j.cars.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,7 @@ import java.util.*;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/posts")
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -113,6 +115,54 @@ public class PostController {
                 .contentLength(post.getPhoto().length)
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(new ByteArrayResource(post.getPhoto()));
+    }
+
+    @GetMapping("/formEditPriceHistory")
+    public String editPriceHistory(HttpSession session, @ModelAttribute("postId") int postId, Model model) {
+        User user = SessionUser.getSessionUser(session);
+        Optional<Post> postById = postService.findPostById(postId);
+        if (postById.isEmpty()) {
+            return "redirect:/error";
+        }
+        Optional<Post> withPriceHistory = postService.findPostWithPriceHistory(postById.get());
+        if (withPriceHistory.isEmpty()) {
+            return "redirect:/error";
+        }
+        Post post = withPriceHistory.get();
+        List<PriceHistory> priceHistories = post.getPriceHistories();
+        priceHistories.sort(Comparator.comparing(PriceHistory::getCreated));
+        model.addAttribute("price", priceHistories.get(priceHistories.size() - 1).getAfter());
+        model.addAttribute("priceHistories", priceHistories);
+        model.addAttribute("user", user);
+        model.addAttribute("post", post);
+        return "/post/addNewPrice";
+    }
+
+    @PostMapping("/changePrice")
+    public String updatePrice(@ModelAttribute("postId") int postId, @ModelAttribute("newPrice") long newPrice) {
+        log.warn("Зашли в метод changePrice");
+        Optional<Post> postById = postService.findPostById(postId);
+        if (postById.isEmpty()) {
+            return "redirect:/error";
+        }
+        Post post = postById.get();
+        log.warn("нашли пост: {}", post);
+
+        List<PriceHistory> priceHistories = priceHistoryService.findPhByPost(post);
+        priceHistories.sort(Comparator.comparing(PriceHistory::getCreated));
+
+        PriceHistory priceHistory = PriceHistory.builder()
+                .post(post)
+                .created(LocalDateTime.now())
+                .before(priceHistories.get(priceHistories.size() - 1).getAfter())
+                .after(newPrice)
+                .build();
+        log.warn("создали новый прайс: {}", priceHistory);
+
+        priceHistories.add(priceHistory);
+        post.setPriceHistories(priceHistories);
+        postService.updatePost(post);
+        return "redirect:/posts/openPost/" + postId;
     }
 
     @PostMapping("/delPost")

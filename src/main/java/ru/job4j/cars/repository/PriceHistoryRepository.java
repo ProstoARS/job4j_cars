@@ -15,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 public class PriceHistoryRepository {
 
-    private static final String FIND_PH_BY_POST_ID = """
+    private static final String FIND_PH_BY_POST = """
             FROM PriceHistory ph
             JOIN FETCH ph.post
             WHERE ph.post = :tPost
@@ -46,6 +46,6 @@ public class PriceHistoryRepository {
      */
 
     public List<PriceHistory> findPhByPost(Post post) {
-        return crudRepository.query(FIND_PH_BY_POST_ID, PriceHistory.class, Map.of("tPost", post));
+        return crudRepository.query(FIND_PH_BY_POST, PriceHistory.class, Map.of("tPost", post));
     }
 }

@@ -45,7 +45,7 @@
         </div>
     </div>
 </nav>
-<form class="form-floating" id="inputDisabled" th:object="${post}">
+<form class="form-floating" th:object="${post}">
     <div class="mb-3">
         <table class="table">
             <thead>
@@ -66,29 +66,21 @@
                     <p style="font-size: 18px; display:inline;"><b th:text="${price} + Р"></b></p>
                 </td>
                 <td th:text="${#temporals.format(post.createdPost, 'dd-MM-yyyy HH:mm')}">
-                <td>
-                    <form th:if="${post.user.id == user.id}" th:action="@{/posts/formEditPriceHistory}"
-                          style="display:inline;">
-                        <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">
-                            Изменить цену
-                        </button>
-                    </form>
-                </td>
             </tr>
             </tbody>
         </table>
         <span>
-            <img th:width="200" th:high="200" th:src="@{|/posts/photoCar/${post.id}}">
+            <img th:width="200" th:high="200" th:src="@{|/posts/photoCar/*{id}}">
         </span>
         <div class="form-group pl-3 pr-3 pt-2">
             <form class="form-floating" th:object="${car}">
                 <div class="mb-3">
-                    <label><b>Марка авто</b></label>
-                    <input type="text" th:field="*{brand}" disabled="disabled">
-                    <label><b>Модель авто</b></label>
-                    <input type="text" disabled="disabled" th:field="*{model}">
-                    <label><b>Двигатель</b></label>
-                    <input type="text" th:field="*{engine.name}" disabled="disabled">
+                    <label for="brand"><b>Марка авто</b></label>
+                    <input type="text" th:field="*{brand}" id="brand" disabled="disabled">
+                    <label for="model"><b>Модель авто</b></label>
+                    <input type="text" disabled="disabled" th:field="*{model}" id="model">
+                    <label for="engine"><b>Двигатель</b></label>
+                    <input type="text" th:field="*{engine.name}" disabled="disabled" id="engine">
                     <br>
                     <br>
                     <label><b>Владельцы</b></label>
@@ -111,7 +103,8 @@
                     <td th:text="${#temporals.format(ph.created, 'dd-MM-yyyy HH:mm')}">
                 </tbody>
             </table>
-            <form method="POST" th:if="${user.login != 'Гость' && user.id != post.user.id}" th:action="@{/participate}" style="display:inline">
+            <form method="POST" th:if="${user.login != 'Гость' && user.id != post.user.id}" th:action="@{/participate}"
+                  style="display:inline">
                 <div th:if="${!checkParticipate}">
                     <button type="submit" name="postId" th:value="${post.id}" class="btn btn-success">
                         Подписаться
@@ -124,9 +117,14 @@
             </form>
             <form th:if="${checkParticipate}" method="POST" th:action="@{/delParticipate}">
                 <div th:text="${user.login} + ' вы подписаны на пост '">Hi, User</div>
-                    <button  type="submit" name="postId" th:value="${post.id}" class="btn btn-success">
-                        Убрать из подписки
-                    </button>
+                <button type="submit" name="postId" th:value="${post.id}" class="btn btn-success">
+                    Убрать из подписки
+                </button>
+            </form>
+            <form method="GET" th:if="${post.user.id == user.id}" th:action="@{/posts/formEditPriceHistory}">
+                <button type="submit" name="postId" th:value="*{id}" class="btn btn-primary mt-3">
+                    Изменить цену
+                </button>
             </form>
             <form method="POST" th:if="${user.id == post.user.id}" th:action="@{/posts/delPost}">
                 <button type="submit" class="btn btn-primary mt-3" name="postId" th:value="${post.id}">
