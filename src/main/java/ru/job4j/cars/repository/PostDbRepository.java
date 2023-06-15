@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 @Slf4j
-public class PostRepository {
+public class PostDbRepository implements IPostRepository {
 
     private static final String FIND_BY_ID = """
             FROM Post p
@@ -69,7 +69,7 @@ public class PostRepository {
      * @param post объявление.
      * @return Optional с объявлением с id, иначе Optional.empty().
      */
-
+    @Override
     public Optional<Post> createPost(Post post) {
         Optional<Post> postOptional = Optional.empty();
         try {
@@ -86,6 +86,7 @@ public class PostRepository {
      * @param id идентификатор объявления.
      * @return Optional с объявлением с id, иначе Optional.empty().
      */
+    @Override
     public Optional<Post> findPostById(int id) {
         Optional<Post> postOptional = Optional.empty();
         try {
@@ -100,6 +101,7 @@ public class PostRepository {
      * Обновить в базе пользователя.
      * @param post пользователь.
      */
+    @Override
     public void update(Post post) {
         crudRepository.run(session -> session.merge(post));
     }
@@ -110,6 +112,7 @@ public class PostRepository {
      * @param id идентификатор объявления.
      * @return Optional  с объявлением, иначе Optional.empty().
      */
+    @Override
     public Optional<Post> findPostWithParticipates(int id) {
         Optional<Post> postOptional = Optional.empty();
         try {
@@ -124,7 +127,7 @@ public class PostRepository {
      * Найти в базе все объявления.
      * @return Список найденых объявлений.
      */
-
+    @Override
     public List<Post> findAll() {
         return crudRepository.query(FIND_ALL, Post.class);
     }
@@ -167,6 +170,7 @@ public class PostRepository {
      * @param id идентификатор объявления.
      * @return Optional  с объявлением либо Optional.empty().
      */
+    @Override
     public Optional<Post> findPostWithPriceHistory(int id) {
         return crudRepository.optional(FIND_POST_WITH_PRICE_HISTORY, Post.class, Map.of("tId", id));
     }
@@ -177,6 +181,7 @@ public class PostRepository {
      * @param post объявление к удалению.
      * @return boolean true если удаление прошло успешно.
      */
+    @Override
     public boolean deleteFromPost(Post post) {
         boolean rsl = false;
         try {

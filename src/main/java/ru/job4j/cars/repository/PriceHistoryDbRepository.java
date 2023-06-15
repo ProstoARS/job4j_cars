@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 @Slf4j
-public class PriceHistoryRepository {
+public class PriceHistoryDbRepository implements IPriceHistoryRepository {
 
     private static final String FIND_PH_BY_POST = """
             FROM PriceHistory ph

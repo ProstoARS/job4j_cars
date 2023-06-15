@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 @Slf4j
-public class EngineRepository {
+public class EngineDbRepository implements IEngineRepository {
 
     private static final String FIND_ALL = """
             FROM Engine e
@@ -31,7 +31,7 @@ public class EngineRepository {
      * @param engine двигатель.
      * @return Optional с двигателем с id, иначе Optional.empty().
      */
-
+    @Override
     public Optional<Engine> createEngine(Engine engine) {
         Optional<Engine> engineOptional = Optional.empty();
         try {
@@ -42,11 +42,11 @@ public class EngineRepository {
         }
         return engineOptional;
     }
-
+    @Override
     public List<Engine> findAll() {
         return crudRepository.query(FIND_ALL, Engine.class);
     }
-
+    @Override
     public Optional<Engine> findById(int id) {
         return crudRepository.optional(FIND_BY_ID, Engine.class, Map.of("tId", id));
     }

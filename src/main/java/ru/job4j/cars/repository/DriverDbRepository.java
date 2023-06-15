@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 @Slf4j
-public class DriverRepository {
+public class DriverDbRepository implements IDriverRepository {
 
     private static final String FIND_ALL = "FROM Driver";
     private final CrudRepository crudRepository;

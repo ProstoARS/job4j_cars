@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 @Slf4j
-public class UserRepository {
+public class UserDbRepository implements IUserRepository {
 
     private static final String DELETE_USER_BY_ID = """
             DELETE FROM User
@@ -52,6 +52,7 @@ public class UserRepository {
      * @param user пользователь.
      * @return Optional с пользователем с id или пустой.
      */
+    @Override
     public Optional<User> create(User user) {
         Optional<User> userOptional = Optional.empty();
         try {
@@ -67,6 +68,7 @@ public class UserRepository {
      * Обновить в базе пользователя.
      * @param user пользователь.
      */
+    @Override
     public void update(User user) {
         crudRepository.run(session -> session.merge(user));
     }
@@ -75,6 +77,7 @@ public class UserRepository {
      * Удалить пользователя по id.
      * @param userId ID
      */
+    @Override
     public void delete(int userId) {
         crudRepository.run(
                 DELETE_USER_BY_ID,
@@ -86,6 +89,7 @@ public class UserRepository {
      * Список пользователь отсортированных по id.
      * @return список пользователей.
      */
+    @Override
     public List<User> findAllUsersOrderById() {
         return crudRepository.query(FIND_ALL_USERS, User.class);
     }
@@ -94,6 +98,7 @@ public class UserRepository {
      * Найти пользователя по ID
      * @return Optional c пользователем или пустой.
      */
+    @Override
     public Optional<User> findById(int id) {
         Optional<User> optionalUser = Optional.empty();
         try {
@@ -112,6 +117,7 @@ public class UserRepository {
      * @param key key
      * @return список пользователей.
      */
+    @Override
     public List<User> findByLikeLogin(String key) {
         return crudRepository.query(
                 FIND_USER_BY_LIKE_LOGIN, User.class,
@@ -125,6 +131,7 @@ public class UserRepository {
      * @param password password.
      * @return Optional с пользователем или пустой.
      */
+    @Override
     public Optional<User> findByLoginAndPassword(String login, String password) {
         Optional<User> optionalUser = Optional.empty();
         try {
@@ -143,13 +150,10 @@ public class UserRepository {
      * @param userId идентификатор пользователя.
      * @return Optional с пользователем или пустой.
      */
+    @Override
     public Optional<User> findUserWithParticipates(int userId) {
         return crudRepository.optional(
                 FIND_USER_WITH_PARTICIPATES, User.class,
                 Map.of("fId", userId));
-    }
-
-    public CrudRepository getCrudRepository() {
-        return this.crudRepository;
     }
 }

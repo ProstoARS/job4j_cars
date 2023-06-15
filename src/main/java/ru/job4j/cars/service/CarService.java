@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.Driver;
-import ru.job4j.cars.repository.CarRepository;
+import ru.job4j.cars.repository.CarDbRepository;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 public class CarService {
 
-    private final CarRepository carRepository;
+    private final CarDbRepository carRepository;
 
     public Optional<Car> createCar(Car car) {
         return carRepository.createCar(car);

@@ -25,7 +25,7 @@ class PostRepositoryTest {
                 .login("User1")
                 .password("12")
                 .build();
-        UserRepository userRepository = new UserRepository(crudRepository);
+        IUserRepository userRepository = new UserDbRepository(crudRepository);
         userRepository.create(user);
     }
 
@@ -68,7 +68,7 @@ class PostRepositoryTest {
                 .description("Test1")
                 .user(user)
                 .build();
-        PostRepository postRepository = new PostRepository(crudRepository);
+        IPostRepository postRepository = new PostDbRepository(crudRepository);
         Optional<Post> postOptional = postRepository.createPost(post);
         if (postOptional.isPresent()) {
             assertThat(postRepository.findPostById(postOptional.get().getId()).get().getDescription())
@@ -96,7 +96,7 @@ class PostRepositoryTest {
                 .description("Test2")
                 .user(user)
                 .build();
-        PostRepository postRepository = new PostRepository(crudRepository);
+        PostDbRepository postRepository = new PostDbRepository(crudRepository);
         postRepository.createPost(post);
         postRepository.createPost(post2);
         postRepository.createPost(post3);
@@ -121,7 +121,7 @@ class PostRepositoryTest {
                 .user(user)
                 .photo(photo)
                 .build();
-        PostRepository postRepository = new PostRepository(crudRepository);
+        PostDbRepository postRepository = new PostDbRepository(crudRepository);
         postRepository.createPost(post);
         postRepository.createPost(post2);
         postRepository.createPost(post3);
@@ -137,7 +137,7 @@ class PostRepositoryTest {
         Engine engine2 = Engine.builder()
                 .name("Tajik")
                 .build();
-        EngineRepository engineRepository = new EngineRepository(crudRepository);
+        EngineDbRepository engineRepository = new EngineDbRepository(crudRepository);
         engineRepository.createEngine(engine);
         engineRepository.createEngine(engine2);
         Car car = Car.builder()
@@ -150,7 +150,7 @@ class PostRepositoryTest {
                 .model("4334")
                 .engine(engine2)
                 .build();
-        CarRepository carRepository = new CarRepository(crudRepository);
+        CarDbRepository carRepository = new CarDbRepository(crudRepository);
         carRepository.createCar(car);
         carRepository.createCar(car2);
         Post post = Post.builder()
@@ -163,7 +163,7 @@ class PostRepositoryTest {
                 .user(user)
                 .car(car2)
                 .build();
-        PostRepository postRepository = new PostRepository(crudRepository);
+        PostDbRepository postRepository = new PostDbRepository(crudRepository);
         postRepository.createPost(post);
         postRepository.createPost(post2);
         List<Post> posts = List.of(post);

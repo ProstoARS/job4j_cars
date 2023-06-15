@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 @AllArgsConstructor
 @Slf4j
-public class CarRepository {
+public class CarDbRepository implements ICarRepository {
 
     private static final String FIND_BY_ID = """
             FROM Car c
@@ -27,7 +27,7 @@ public class CarRepository {
      * @param car автомобиль.
      * @return Optional с автомобилем с id, иначе Optional.empty().
      */
-
+    @Override
     public Optional<Car> createCar(Car car) {
         Optional<Car> carOptional = Optional.empty();
         try {
@@ -45,7 +45,7 @@ public class CarRepository {
      * @param id идентификатор.
      * @return Optional с автомобилем с id, иначе Optional.empty().
      */
-
+    @Override
     public Optional<Car> findCarById(int id) {
         Optional<Car> carOptional = Optional.empty();
         try {

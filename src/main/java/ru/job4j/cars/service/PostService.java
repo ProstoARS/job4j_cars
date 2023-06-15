@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Post;
-import ru.job4j.cars.repository.PostRepository;
-
+import ru.job4j.cars.repository.IPostRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @PropertySource("classpath:application.properties")
 public class PostService {
 
-    private final PostRepository postRepository;
+    private final IPostRepository postRepository;
     @Value("${defaultTimeZone}")
     private String defaultTimeZone;
 
@@ -44,20 +43,8 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public List<Post> findPostLastDay() {
-        return postRepository.findPostLastDay();
-    }
-
-    public List<Post> findPostWithPhoto() {
-        return postRepository.findPostWithPhoto();
-    }
-
     public boolean deleteFromPost(Post post) {
         return postRepository.deleteFromPost(post);
-    }
-
-    public List<Post> findPostOfSpecificBrand(String brand) {
-        return postRepository.findPostOfSpecificBrand(brand);
     }
 
     public Optional<Post> findPostWithPriceHistory(Post post) {

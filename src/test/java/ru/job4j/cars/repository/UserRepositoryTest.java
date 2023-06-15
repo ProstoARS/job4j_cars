@@ -52,7 +52,7 @@ class UserRepositoryTest {
                 .login("User17")
                 .password("12")
                 .build();
-        UserRepository userRepository = new UserRepository(crudRepository);
+        IUserRepository userRepository = new UserDbRepository(crudRepository);
         Optional<User> optionalUser = userRepository.create(user);
         int userId;
         if (optionalUser.isPresent()) {
@@ -69,7 +69,7 @@ class UserRepositoryTest {
                 .login("User1")
                 .password("12")
                 .build();
-        UserRepository userRepository = new UserRepository(crudRepository);
+        IUserRepository userRepository = new UserDbRepository(crudRepository);
         Optional<User> optionalUser = userRepository.create(user);
         user.setPassword("13");
         int userId;
@@ -88,7 +88,7 @@ class UserRepositoryTest {
                 .login("User1")
                 .password("12")
                 .build();
-        UserRepository userRepository = new UserRepository(crudRepository);
+        IUserRepository userRepository = new UserDbRepository(crudRepository);
         Optional<User> optionalUser = userRepository.create(user);
         int userId;
         if (optionalUser.isPresent()) {
@@ -110,7 +110,7 @@ class UserRepositoryTest {
                 .login("User2")
                 .password("13")
                 .build();
-        UserRepository userRepository = new UserRepository(crudRepository);
+        IUserRepository userRepository = new UserDbRepository(crudRepository);
         userRepository.create(user1);
         userRepository.create(user2);
         List<User> users = List.of(user1, user2);
@@ -131,7 +131,7 @@ class UserRepositoryTest {
                 .login("Peter1")
                 .password("14")
                 .build();
-        UserRepository userRepository = new UserRepository(crudRepository);
+        UserDbRepository userRepository = new UserDbRepository(crudRepository);
         userRepository.create(user1);
         userRepository.create(user2);
         userRepository.create(user3);
@@ -149,7 +149,7 @@ class UserRepositoryTest {
                 .login("Peter1")
                 .password("14")
                 .build();
-        UserRepository userRepository = new UserRepository(crudRepository);
+        IUserRepository userRepository = new UserDbRepository(crudRepository);
         userRepository.create(user1);
         userRepository.create(user2);
         assertThat(userRepository.findByLoginAndPassword("Peter1", "14").get()).isEqualTo(user2);
@@ -166,7 +166,7 @@ class UserRepositoryTest {
                 .password("14")
                 .posts(new ArrayList<>())
                 .build();
-        UserRepository userRepository = new UserRepository(crudRepository);
+        UserDbRepository userRepository = new UserDbRepository(crudRepository);
         userRepository.create(user1);
         userRepository.create(user2);
         Post post = Post.builder()
@@ -178,7 +178,7 @@ class UserRepositoryTest {
                 .user(user1)
                 .participates(new ArrayList<>())
                 .build();
-        PostRepository postRepository = new PostRepository(crudRepository);
+        PostDbRepository postRepository = new PostDbRepository(crudRepository);
         postRepository.createPost(post);
         postRepository.createPost(post2);
 

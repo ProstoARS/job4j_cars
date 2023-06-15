@@ -41,17 +41,17 @@ class CarRepositoryTest {
 
     @Test
     void whenCreatedCarWithOwners() {
-        DriverRepository driverRepository = new DriverRepository(crudRepository);
+        IDriverRepository driverRepository = new DriverDbRepository(crudRepository);
         Driver driver = Driver.builder()
                 .name("Ivan")
                 .build();
         driverRepository.createDriver(driver);
-        EngineRepository engineRepository = new EngineRepository(crudRepository);
+        IEngineRepository engineRepository = new EngineDbRepository(crudRepository);
         Engine engine = Engine.builder()
                 .name("Бензин")
                 .build();
         engineRepository.createEngine(engine);
-        CarRepository carRepository = new CarRepository(crudRepository);
+        ICarRepository carRepository = new CarDbRepository(crudRepository);
         Car car = Car.builder()
                 .brand("Nissan")
                 .model("Note")
