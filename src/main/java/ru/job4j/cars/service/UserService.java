@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.repository.IUserRepository;
-import java.util.ArrayList;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,38 +47,21 @@ public class UserService {
     }
 
     public Optional<User> findUserWithParticipates(User user) {
-        Optional<User> optionalUser;
-        try {
-            optionalUser = userRepository.findUserWithParticipates(user.getId());
-        } catch (Exception e) {
-            log.error("Подписок ещё нет", e);
-            user.setPosts(new ArrayList<>());
+        Optional<User> optionalUser = userRepository.findUserWithParticipates(user.getId());
+        if (optionalUser.isEmpty()) {
+            user.setPosts(new HashSet<>());
             return Optional.of(user);
         }
         return optionalUser;
     }
 
-    public boolean addParticipate(User user, Post post) {
-        boolean rsl = false;
-        try {
+    public void addParticipate(User user, Post post) {
             user.getPosts().add(post);
             post.getParticipates().add(user);
-            rsl = true;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return !rsl;
     }
 
-    public boolean delParticipate(User user, Post post) {
-        boolean rsl = false;
-        try {
+    public void delParticipate(User user, Post post) {
             user.getPosts().remove(post);
             post.getParticipates().remove(user);
-            rsl = true;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return !rsl;
     }
 }

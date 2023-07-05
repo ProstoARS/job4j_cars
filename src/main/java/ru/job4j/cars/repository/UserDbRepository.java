@@ -100,16 +100,10 @@ public class UserDbRepository implements IUserRepository {
      */
     @Override
     public Optional<User> findById(int id) {
-        Optional<User> optionalUser = Optional.empty();
-        try {
-            optionalUser = crudRepository.optional(
+            return crudRepository.optional(
                     FIND_USER_BY_ID, User.class,
                     Map.of("fId", id)
             );
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-         return optionalUser;
     }
 
     /**
@@ -133,16 +127,10 @@ public class UserDbRepository implements IUserRepository {
      */
     @Override
     public Optional<User> findByLoginAndPassword(String login, String password) {
-        Optional<User> optionalUser = Optional.empty();
-        try {
-           optionalUser = crudRepository.optional(
+           return crudRepository.optional(
                    FIND_USER_BY_LOGIN_AND_PASSWORD, User.class,
                     Map.of("fLogin", login, "fPassword", password)
             );
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return optionalUser;
     }
 
     /**

@@ -2,7 +2,6 @@ package ru.job4j.cars.repository;
 import lombok.AllArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -42,7 +41,31 @@ public class CrudRepository {
             for (Map.Entry<String, Object> arg : args.entrySet()) {
                 sq.setParameter(arg.getKey(), arg.getValue());
             }
-            return Optional.ofNullable(sq.getSingleResult());
+            return sq.uniqueResultOptional();
+        };
+        return tx(command);
+    }
+
+    public <T> Optional<T> optionalOneLimit(String query, Class<T> cl, Map<String, Object> args) {
+        Function<Session, Optional<T>> command = session -> {
+            var sq = session
+                    .createQuery(query, cl);
+            for (Map.Entry<String, Object> arg : args.entrySet()) {
+                sq.setParameter(arg.getKey(), arg.getValue());
+            }
+            return sq.setMaxResults(1).uniqueResultOptional();
+        };
+        return tx(command);
+    }
+
+    public <T> List<T> listLimit(String query, Class<T> cl, Map<String, Object> args, int limit) {
+        Function<Session, List<T>> command = session -> {
+            var sq = session
+                    .createQuery(query, cl);
+            for (Map.Entry<String, Object> arg : args.entrySet()) {
+                sq.setParameter(arg.getKey(), arg.getValue());
+            }
+            return sq.setMaxResults(limit).getResultList();
         };
         return tx(command);
     }
@@ -69,7 +92,7 @@ public class CrudRepository {
     public boolean query(String query, Map<String, Object> args) {
         Function<Session, Boolean> command =
                 session -> {
-                    Query qr = session.createQuery(query);
+                    var qr = session.createQuery(query);
                     args.keySet().forEach(key -> qr.setParameter(key, args.get(key)));
                     return qr.executeUpdate() > 0;
                 };

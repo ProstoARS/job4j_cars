@@ -3,8 +3,8 @@ package ru.job4j.cars.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -28,7 +28,7 @@ public class User {
             name = "participates",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "post_id")})
-    private List<Post> posts = new ArrayList<>();
+    private Set<Post> posts = new HashSet<>();
     @Column(name = "time_zone")
     private String timeZone;
 }

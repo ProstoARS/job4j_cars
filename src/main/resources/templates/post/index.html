@@ -66,7 +66,7 @@
                 <span th:text="${post.car.brand}"></span>
                 <span th:text="${post.car.model}"></span>
                 <span>
-                    <img th:width="70" th:high="70" th:src="@{|/posts/photoCar/${post.id}}">
+                    <img th:width="70" th:high="70" th:src="@{|/photoCar/${post.id}}">
                 </span>
             <td th:text="${#temporals.format(post.createdPost, 'dd-MM-yyyy HH:mm')}">
             <td th:text="${post.user.login}">

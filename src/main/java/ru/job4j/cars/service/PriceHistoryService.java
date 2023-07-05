@@ -22,4 +22,8 @@ public class PriceHistoryService {
     public List<PriceHistory> findPhByPost(Post post) {
         return priceHistoryRepository.findPhByPost(post);
     }
+
+    public Optional<PriceHistory> findLastPrice(Post post) {
+        return priceHistoryRepository.findLastPrice(post);
+    }
 }

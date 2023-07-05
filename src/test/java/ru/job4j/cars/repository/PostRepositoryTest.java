@@ -104,30 +104,6 @@ class PostRepositoryTest {
         assertThat(postRepository.findPostLastDay()).isEqualTo(posts);
     }
 
-    @Test
-    void whenFindPostWithPhoto() {
-        byte[] photo = new byte[]{1, 2, 3};
-        Post post = Post.builder()
-                .description("Test1")
-                .user(user)
-                .build();
-        Post post2 = Post.builder()
-                .description("Test2")
-                .user(user)
-                .photo(photo)
-                .build();
-        Post post3 = Post.builder()
-                .description("Test2")
-                .user(user)
-                .photo(photo)
-                .build();
-        PostDbRepository postRepository = new PostDbRepository(crudRepository);
-        postRepository.createPost(post);
-        postRepository.createPost(post2);
-        postRepository.createPost(post3);
-        List<Post> posts = List.of(post2, post3);
-        assertThat(postRepository.findPostWithPhoto()).isEqualTo(posts);
-    }
 
     @Test
     void whenFindPostOfSpecificBrand() {

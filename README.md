@@ -25,3 +25,9 @@
 - Перейти в корневую папку проекта;
 - Запустить приложение командой mvn spring-boot:run;
 - Перейти по ссылке http://localhost:8080/index в браузере.
+### Главная страница
+![](src/main/resources/images/2023-07-05 20_05_40-Cars.png)
+### Страница создания поста
+![](src/main/resources/images/2023-07-05 20_03_29-Cars.png)
+### Страница просмотра поста
+![](src/main/resources/images/2023-07-05 19_53_49-Cars.png)

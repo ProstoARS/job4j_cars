@@ -50,10 +50,6 @@ public class PostDbRepository implements IPostRepository {
             BETWEEN :fFrom AND :fTo
             """;
 
-    private static final String WITH_PHOTO = """
-            FROM Post
-            WHERE photo IS NOT NULL
-            """;
 
     private static final String SPECIFIC_BRAND = """
             FROM Post p
@@ -88,13 +84,7 @@ public class PostDbRepository implements IPostRepository {
      */
     @Override
     public Optional<Post> findPostById(int id) {
-        Optional<Post> postOptional = Optional.empty();
-        try {
-            postOptional = crudRepository.optional(FIND_BY_ID, Post.class, Map.of("tId", id));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return postOptional;
+            return crudRepository.optional(FIND_BY_ID, Post.class, Map.of("tId", id));
     }
 
     /**
@@ -114,13 +104,7 @@ public class PostDbRepository implements IPostRepository {
      */
     @Override
     public Optional<Post> findPostWithParticipates(int id) {
-        Optional<Post> postOptional = Optional.empty();
-        try {
-            postOptional = crudRepository.optional(FIND_POST_WITH_PARTICIPATES, Post.class, Map.of("tId", id));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return postOptional;
+            return crudRepository.optional(FIND_POST_WITH_PARTICIPATES, Post.class, Map.of("tId", id));
     }
 
     /**
@@ -143,15 +127,6 @@ public class PostDbRepository implements IPostRepository {
         return crudRepository.query(LAST_DAY, Post.class, Map.of("fTo", now, "fFrom", yesterday));
     }
 
-    /**
-     * Найти в базе объявления с фотографией.
-     *
-     * @return Список найденых объявлений.
-     */
-
-    public List<Post> findPostWithPhoto() {
-        return crudRepository.query(WITH_PHOTO, Post.class);
-    }
 
     /**
      * Найти в базе объявления по бренду автомобиля.

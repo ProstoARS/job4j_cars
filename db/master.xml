@@ -16,7 +16,7 @@
     <include file="scripts/008_ddl_create_driver_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/009_ddl_create_history_owner_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/010_ddl_add_column_in_auto_post_car_id.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/011_ddl_add_column_in_auto_post_photo.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/011_ddl_create_car_photo.sql" relativeToChangelogFile="true"/>
     <include file="scripts/012_ddl_add_column_in_auto_users_time_zone.sql" relativeToChangelogFile="true"/>
     <include file="scripts/013_dml_insert_into_engine.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

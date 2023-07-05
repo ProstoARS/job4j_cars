@@ -15,10 +15,11 @@ import java.util.Optional;
 @Slf4j
 public class PriceHistoryDbRepository implements IPriceHistoryRepository {
 
-    private static final String FIND_PH_BY_POST = """
+    private static final String FIND_SORTED_PH_BY_POST = """
             FROM PriceHistory ph
             JOIN FETCH ph.post
             WHERE ph.post = :tPost
+            ORDER BY ph.created DESC
             """;
 
     CrudRepository crudRepository;
@@ -44,8 +45,16 @@ public class PriceHistoryDbRepository implements IPriceHistoryRepository {
      * @param post идентификатор поста.
      * @return List с историями цены.
      */
-
     public List<PriceHistory> findPhByPost(Post post) {
-        return crudRepository.query(FIND_PH_BY_POST, PriceHistory.class, Map.of("tPost", post));
+        return crudRepository.query(FIND_SORTED_PH_BY_POST, PriceHistory.class, Map.of("tPost", post));
+    }
+
+    /**
+     * Найти последнее изменение цены.
+     * @param post идентификатор поста.
+     * @return Optional с ценой, либо пустой.
+     */
+    public Optional<PriceHistory> findLastPrice(Post post) {
+        return crudRepository.optionalOneLimit(FIND_SORTED_PH_BY_POST, PriceHistory.class, Map.of("tPost", post));
     }
 }

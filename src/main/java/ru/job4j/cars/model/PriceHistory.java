@@ -22,6 +22,7 @@ public class PriceHistory {
     private long before;
     private long after;
     private LocalDateTime created = LocalDateTime.now();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;

@@ -5,15 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.service.PostService;
 import ru.job4j.cars.service.UserService;
-import ru.job4j.cars.util.SessionUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.TimeZone;
 
@@ -23,14 +19,13 @@ import java.util.TimeZone;
 public class UserController {
 
     private final UserService userService;
-    private final PostService postService;
 
     @GetMapping("/formRegistration")
     public String formRegistration(Model model, @RequestParam(name = "fail", required = false) Boolean fail) {
         model.addAttribute("fail", fail != null);
         model.addAttribute("timeZonesIDs", TimeZone.getAvailableIDs());
         model.addAttribute("defaultTZ", TimeZone.getDefault().getID());
-        return "/registration";
+        return "/user/registration";
     }
 
     @PostMapping("/registration")
@@ -45,7 +40,7 @@ public class UserController {
     @GetMapping("/loginPage")
     public String loginPage(Model model, @RequestParam(name = "fail", required = false) Boolean fail) {
         model.addAttribute("fail", fail != null);
-        return "login";
+        return "/user/login";
     }
 
     @PostMapping("/login")
@@ -69,48 +64,7 @@ public class UserController {
 
     @GetMapping("/success")
     public String success() {
-        return "success";
+        return "/user/success";
     }
 
-    @PostMapping("/participate")
-    public String subscribe(HttpSession session, @ModelAttribute("postId") int postId) {
-        Optional<Post> optionalPost = postService.findPostById(postId);
-        if (optionalPost.isEmpty()) {
-            log.error("Пост не вытащился с базы");
-            return "redirect:/error";
-        }
-        Post postById = optionalPost.get();
-        User sessionUser = SessionUser.getSessionUser(session);
-        sessionUser.setPosts(new ArrayList<>());
-        postById.setParticipates(new ArrayList<>());
-        Optional<User> optionalUser = userService.findUserWithParticipates(sessionUser);
-        User user = optionalUser.get();
-        if (userService.addParticipate(user, postById)) {
-            log.error("В коллекции не добавились данные");
-            return "redirect:/error";
-        }
-        userService.update(user);
-        return "redirect:/posts/openPost/" + postId;
-    }
-
-    @PostMapping("/delParticipate")
-    public String delParticipate(HttpSession session, @ModelAttribute("postId") int postId) {
-        Optional<Post> optionalPost = postService.findPostById(postId);
-        if (optionalPost.isEmpty()) {
-            log.error("Пост не вытащился с базы");
-            return "redirect:/error";
-        }
-        Post post = optionalPost.get();
-        User sessionUser = SessionUser.getSessionUser(session);
-        sessionUser.setPosts(new ArrayList<>());
-        post.setParticipates(new ArrayList<>());
-        Optional<User> optionalUser = userService.findUserWithParticipates(sessionUser);
-        User user = optionalUser.get();
-        if (userService.delParticipate(user, post)) {
-            log.error("В коллекции не удалились данные");
-            return "redirect:/error";
-        }
-        userService.update(user);
-        return "redirect:/posts/openPost/" + postId;
-    }
 }

@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -34,11 +35,12 @@ public class Post {
 
     @ManyToMany(mappedBy = "posts", cascade = CascadeType.REMOVE)
     @ToString.Exclude
-    private List<User> participates;
+    private Set<User> participates;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "car_id")
     private Car car;
 
-    private byte[] photo;
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
+    private CarPhoto carPhoto;
 }

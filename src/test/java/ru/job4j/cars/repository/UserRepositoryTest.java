@@ -10,10 +10,7 @@ import ru.job4j.cars.model.User;
 import ru.job4j.cars.service.UserService;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -164,29 +161,26 @@ class UserRepositoryTest {
         User user2 = User.builder()
                 .login("User2")
                 .password("14")
-                .posts(new ArrayList<>())
+                .posts(new HashSet<>())
                 .build();
         UserDbRepository userRepository = new UserDbRepository(crudRepository);
         userRepository.create(user1);
         userRepository.create(user2);
         Post post = Post.builder()
                 .user(user1)
-                .participates(new ArrayList<>())
+                .participates(new HashSet<>())
                 .build();
         Post post2 = Post.builder()
                 .description("второй пост")
                 .user(user1)
-                .participates(new ArrayList<>())
+                .participates(new HashSet<>())
                 .build();
         PostDbRepository postRepository = new PostDbRepository(crudRepository);
         postRepository.createPost(post);
         postRepository.createPost(post2);
 
         UserService userService = new UserService(userRepository);
-        if (userService.addParticipate(user2, post)) {
-            System.out.println("ОШИБКА!!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
-
+        userService.addParticipate(user2, post);
         userRepository.update(user2);
         Optional<User> participatesByUser1 = userRepository.findUserWithParticipates(user2.getId());
         User ars = participatesByUser1.get();
